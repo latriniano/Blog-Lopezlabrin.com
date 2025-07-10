@@ -1,0 +1,130 @@
+/* Article Content Styles for López Labrin Dark Theme */
+.article-content {
+  color: #eaeaea;
+  line-height: 1.7;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  color: #ffffff;
+  font-weight: bold;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(234, 234, 234, 0.3);
+}
+
+.article-content h1 {
+  font-size: 2.5rem;
+  margin-top: 0;
+}
+
+.article-content h2 {
+  font-size: 2rem;
+}
+
+.article-content h3 {
+  font-size: 1.5rem;
+}
+
+.article-content p {
+  margin-bottom: 1.5rem;
+  color: #eaeaea;
+}
+
+.article-content a {
+  color: #1e90ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.article-content a:hover {
+  color: #87ceeb;
+  text-shadow: 0 0 8px rgba(30, 144, 255, 0.4);
+}
+
+.article-content blockquote {
+  border-left: 4px solid #8a2be2;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #d3d3d3;
+  background: rgba(138, 43, 226, 0.1);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+}
+
+.article-content ul,
+.article-content ol {
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.article-content li {
+  margin-bottom: 0.5rem;
+  color: #eaeaea;
+}
+
+.article-content code {
+  background: rgba(138, 43, 226, 0.2);
+  color: #ffffff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: "Courier New", monospace;
+}
+
+.article-content pre {
+  background: #1a1a1a;
+  color: #eaeaea;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 2rem 0;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  background: rgba(26, 26, 26, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.article-content th,
+.article-content td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.article-content th {
+  background: rgba(138, 43, 226, 0.2);
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.article-content hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, #dc143c, #8a2be2, #1e90ff);
+  margin: 3rem 0;
+  border-radius: 1px;
+}
