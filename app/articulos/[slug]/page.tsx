@@ -1,33 +1,30 @@
 // app/articulos/[slug]/page.tsx
+
 import { getPublishedBlogPosts, getSinglePostBySlug, getPostContent } from "@/lib/notion";
 import { notFound } from "next/navigation";
 import NotionRenderer from "@/components/NotionRenderer";
 
 export async function generateStaticParams() {
   const posts = await getPublishedBlogPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  // Nos aseguramos de que post.slug no sea null o undefined antes de incluirlo
+  return posts.filter(post => post.slug).map((post) => ({
+    slug: post.slug,
+  }));
 }
 
-export default async function ArticlePage({ params }: { params: { slug:string }}) {
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const post = await getSinglePostBySlug(params.slug);
-  if (!post) notFound();
 
-// --- INICIO DEPURACIÓN FINAL ---
-console.log("==============================================");
-console.log("PÁGINA ENCONTRADA POR SLUG:", params.slug);
-console.log("Título de la página:", post.title);
-console.log("ID DE LA PÁGINA QUE VAMOS A BUSCAR:", post.id); // <-- ¡La línea más importante!
-console.log("==============================================");
+  if (!post) {
+    notFound();
+  }
 
- const content = await getPostContent(post.id);
-
-console.log("ESTRUCTURA DE DATOS RECIBIDA PARA ESE ID:", JSON.stringify(content, null, 2));
-console.log("==============================================");
-// --- FIN DEPURACIÓN FINAL ---
+  // ESTA ES LA LÍNEA QUE PROBABLEMENTE FALTABA
+  const content = await getPostContent(post.id);
 
   return (
     <div className="min-h-screen bg-[#121212] text-white">
-
+      
       <main className="pt-24">
         <article className="max-w-4xl mx-auto px-4 py-8">
           <header className="mb-12 text-center">
@@ -43,7 +40,7 @@ console.log("==============================================");
           </div>
         </article>
       </main>
-
+      
     </div>
   );
 }
