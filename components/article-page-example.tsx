@@ -1,37 +1,44 @@
 import { ArticleLayout } from "./article-layout"
 
-export function ArticlePageExample() {
-  const sampleContent = `
-    <p>Este es un ejemplo de cómo se vería un artículo completo en el blog López Labrin. El contenido está optimizado para la lectura con un diseño que prioriza la legibilidad y la experiencia del usuario.</p>
+const exampleArticle = {
+  title: "La Reforma Judicial y sus Implicaciones Constitucionales",
+  content: `
+    <p>El derecho constitucional ha experimentado transformaciones significativas en las últimas dos décadas. Los desafíos del siglo XXI han obligado a repensar conceptos fundamentales sobre derechos, libertades y la estructura del Estado.</p>
     
-    <h2>Análisis Jurídico</h2>
-    <p>En el contexto actual del derecho constitucional, es fundamental analizar las implicaciones de las recientes reformas legislativas. Estas modificaciones no solo afectan el marco normativo, sino que también tienen repercusiones directas en la aplicación práctica del derecho.</p>
+    <h2>Nuevos Paradigmas Constitucionales</h2>
+    <p>La era digital ha introducido complejidades inéditas en el ámbito constitucional. La protección de datos personales, el derecho al olvido y la libertad de expresión en plataformas digitales son solo algunos de los temas que requieren una reinterpretación constitucional.</p>
     
     <blockquote>
-      <p>"El derecho no es solo un conjunto de normas, sino un sistema vivo que debe adaptarse a las necesidades sociales contemporáneas."</p>
+      <p>"Las constituciones del siglo XXI deben ser documentos vivos que evolucionen con la sociedad, sin perder su esencia protectora de derechos fundamentales."</p>
     </blockquote>
     
-    <h3>Perspectiva Política</h3>
-    <p>Desde una perspectiva política, estos cambios reflejan una tendencia hacia la modernización del sistema jurídico, aunque no están exentos de controversia.</p>
+    <h3>Impacto de la Globalización</h3>
+    <p>La globalización ha creado tensiones entre la soberanía nacional y la necesidad de cooperación internacional. Los tratados internacionales de derechos humanos han adquirido una relevancia sin precedentes.</p>
     
     <ul>
-      <li>Impacto en la jurisprudencia existente</li>
-      <li>Efectos en la práctica profesional</li>
-      <li>Consecuencias para los ciudadanos</li>
+      <li>Integración de normas internacionales en el derecho interno</li>
+      <li>Conflictos entre jurisdicciones nacionales e internacionales</li>
+      <li>Armonización de sistemas jurídicos diversos</li>
     </ul>
     
-    <h3>Conclusiones</h3>
-    <p>Es evidente que estamos ante un momento de transformación significativa en el panorama jurídico nacional. La adaptación a estos cambios requerirá un esfuerzo conjunto de todos los actores del sistema judicial.</p>
-  `
+    <h3>Desafíos Futuros</h3>
+    <p>El futuro del derecho constitucional dependerá de su capacidad para adaptarse a realidades emergentes como la inteligencia artificial, el cambio climático y las nuevas formas de participación democrática.</p>
+  `,
+  date: "15 de enero, 2025",
+  category: "Derecho",
+  readTime: "12 min de lectura",
+  author: "López Labrin Lautaro",
+}
 
+export function ArticlePageExample() {
   return (
     <ArticleLayout
-      title="Análisis de las Recientes Reformas Constitucionales: Impacto y Perspectivas"
-      date="15 de enero, 2025"
-      category="Derecho Constitucional"
-      readTime="8 min de lectura"
-    >
-      <div dangerouslySetInnerHTML={{ __html: sampleContent }} />
-    </ArticleLayout>
+      title={exampleArticle.title}
+      content={exampleArticle.content}
+      date={exampleArticle.date}
+      category={exampleArticle.category}
+      readTime={exampleArticle.readTime}
+      author={exampleArticle.author}
+    />
   )
 }

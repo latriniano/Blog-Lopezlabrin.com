@@ -16,289 +16,28 @@ import {
   ChevronRight,
   Menu,
   X,
-  ChevronUp,
   Loader2,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
+import { articlesData } from "@/lib/articles-data"
 
 interface Article {
-  id: number
+  id: string
   title: string
+  slug: string
   excerpt: string
-  fullContent: string
+  content: string
   date: string
   category: string
   readTime: string
   gradientClass: string
+  imageUrl?: string
 }
-
-// Extended article dataset
-const allArticles: Article[] = [
-  {
-    id: 1,
-    title: "La Reforma Judicial y sus Implicaciones Constitucionales",
-    excerpt:
-      "Un análisis profundo sobre los cambios propuestos en el sistema judicial argentino y su impacto en la división de poderes.",
-    fullContent: `
-      <p>El derecho constitucional ha experimentado transformaciones significativas en las últimas dos décadas. Los desafíos del siglo XXI han obligado a repensar conceptos fundamentales sobre derechos, libertades y la estructura del Estado.</p>
-      
-      <h2>Nuevos Paradigmas Constitucionales</h2>
-      <p>La era digital ha introducido complejidades inéditas en el ámbito constitucional. La protección de datos personales, el derecho al olvido y la libertad de expresión en plataformas digitales son solo algunos de los temas que requieren una reinterpretación constitucional.</p>
-      
-      <blockquote>
-        <p>"Las constituciones del siglo XXI deben ser documentos vivos que evolucionen con la sociedad, sin perder su esencia protectora de derechos fundamentales."</p>
-      </blockquote>
-      
-      <h3>Impacto de la Globalización</h3>
-      <p>La globalización ha creado tensiones entre la soberanía nacional y la necesidad de cooperación internacional. Los tratados internacionales de derechos humanos han adquirido una relevancia sin precedentes.</p>
-      
-      <ul>
-        <li>Integración de normas internacionales en el derecho interno</li>
-        <li>Conflictos entre jurisdicciones nacionales e internacionales</li>
-        <li>Armonización de sistemas jurídicos diversos</li>
-      </ul>
-      
-      <h3>Desafíos Futuros</h3>
-      <p>El futuro del derecho constitucional dependerá de su capacidad para adaptarse a realidades emergentes como la inteligencia artificial, el cambio climático y las nuevas formas de participación democrática.</p>
-    `,
-    date: "15 de enero, 2025",
-    category: "Derecho",
-    readTime: "12 min de lectura",
-    gradientClass: "gradient-red-blue",
-  },
-  {
-    id: 2,
-    title: "Economía Política: El Rol del Estado en la Crisis Actual",
-    excerpt:
-      "Examinamos las políticas económicas implementadas y su efectividad en el contexto de la crisis inflacionaria.",
-    fullContent: `
-      <p>La pandemia de COVID-19 obligó a gobiernos de todo el mundo a implementar políticas fiscales expansivas sin precedentes. Tres años después, es momento de evaluar sus consecuencias económicas y sociales.</p>
-      
-      <h2>Medidas Implementadas</h2>
-      <p>Los paquetes de estímulo incluyeron transferencias directas a ciudadanos, subsidios a empresas, moratorias fiscales y programas de empleo de emergencia. Estas medidas, aunque necesarias, han tenido efectos complejos.</p>
-      
-      <h3>Efectos Positivos</h3>
-      <ul>
-        <li>Prevención de una recesión más profunda</li>
-        <li>Mantenimiento del empleo en sectores críticos</li>
-        <li>Protección de los sectores más vulnerables</li>
-        <li>Aceleración de la digitalización económica</li>
-      </ul>
-      
-      <h3>Consecuencias Negativas</h3>
-      <p>Sin embargo, estas políticas también han generado efectos adversos:</p>
-      
-      <blockquote>
-        <p>"El dilema actual es cómo mantener el crecimiento económico mientras se controla la inflación y se reduce el déficit fiscal."</p>
-      </blockquote>
-      
-      <p>La inflación ha resurgido como un problema central, afectando especialmente a los sectores de menores ingresos. Además, el aumento de la deuda pública plantea interrogantes sobre la sostenibilidad fiscal a largo plazo.</p>
-    `,
-    date: "12 de enero, 2025",
-    category: "Economía",
-    readTime: "8 min de lectura",
-    gradientClass: "gradient-blue-red",
-  },
-  {
-    id: 3,
-    title: "Análisis de la Nueva Ley de Alquileres",
-    excerpt: "Revisión crítica de las modificaciones legislativas y su impacto en el mercado inmobiliario nacional.",
-    fullContent: `
-      <p>La nueva legislación sobre alquileres ha generado un intenso debate en el ámbito jurídico y económico. Sus implicaciones trascienden el mero aspecto contractual para adentrarse en cuestiones de política habitacional y derechos sociales.</p>
-      
-      <h2>Principales Modificaciones</h2>
-      <p>Las reformas introducidas buscan equilibrar los derechos de inquilinos y propietarios, estableciendo nuevos marcos regulatorios que afectan desde la duración de los contratos hasta los mecanismos de actualización de precios.</p>
-      
-      <h3>Impacto en el Mercado</h3>
-      <p>Los primeros análisis sugieren efectos mixtos:</p>
-      
-      <ul>
-        <li>Mayor seguridad jurídica para los inquilinos</li>
-        <li>Posible reducción de la oferta de propiedades en alquiler</li>
-        <li>Cambios en los patrones de inversión inmobiliaria</li>
-      </ul>
-      
-      <blockquote>
-        <p>"La regulación del mercado de alquileres debe encontrar el equilibrio entre la protección social y la eficiencia económica."</p>
-      </blockquote>
-      
-      <h3>Perspectivas Futuras</h3>
-      <p>La implementación efectiva de estas medidas requerirá un seguimiento cuidadoso de sus efectos en el mercado inmobiliario y posibles ajustes normativos basados en evidencia empírica.</p>
-    `,
-    date: "10 de enero, 2025",
-    category: "Derecho",
-    readTime: "15 min de lectura",
-    gradientClass: "gradient-red-red",
-  },
-  {
-    id: 4,
-    title: "Democracia y Participación Ciudadana en el Siglo XXI",
-    excerpt: "Un examen de los nuevos mecanismos de participación política y su impacto en la legitimidad democrática.",
-    fullContent: `
-      <p>La democracia representativa enfrenta desafíos sin precedentes en la era digital. La aparición de nuevas formas de participación ciudadana está redefiniendo la relación entre gobernantes y gobernados.</p>
-      
-      <h2>Nuevas Formas de Participación</h2>
-      <p>Las tecnologías digitales han habilitado mecanismos de participación que trascienden los límites tradicionales de la democracia representativa. Desde consultas ciudadanas en línea hasta presupuestos participativos, las opciones se multiplican.</p>
-      
-      <h3>Ventajas y Desafíos</h3>
-      <ul>
-        <li>Mayor accesibilidad para la participación ciudadana</li>
-        <li>Riesgo de fragmentación del debate público</li>
-        <li>Necesidad de nuevos marcos regulatorios</li>
-        <li>Cuestiones de representatividad y legitimidad</li>
-      </ul>
-      
-      <blockquote>
-        <p>"La tecnología puede ser una herramienta poderosa para la democratización, pero requiere marcos institucionales sólidos para ser efectiva."</p>
-      </blockquote>
-    `,
-    date: "8 de enero, 2025",
-    category: "Política",
-    readTime: "10 min de lectura",
-    gradientClass: "gradient-blue-violet",
-  },
-  {
-    id: 5,
-    title: "El Futuro de los Derechos Laborales en la Era Digital",
-    excerpt:
-      "Análisis de cómo la transformación digital está redefiniendo las relaciones laborales y los derechos de los trabajadores.",
-    fullContent: `
-      <p>La revolución digital ha transformado fundamentalmente el mundo del trabajo. Nuevas formas de empleo, como el trabajo por plataformas, desafían las categorías tradicionales del derecho laboral.</p>
-      
-      <h2>Nuevos Paradigmas Laborales</h2>
-      <p>La gig economy, el teletrabajo y la automatización están reconfigurando no solo cómo trabajamos, sino también nuestros derechos y protecciones como trabajadores.</p>
-      
-      <h3>Desafíos Regulatorios</h3>
-      <ul>
-        <li>Clasificación de trabajadores de plataformas</li>
-        <li>Protección social para nuevas formas de empleo</li>
-        <li>Derechos de privacidad en el trabajo remoto</li>
-        <li>Impacto de la inteligencia artificial en el empleo</li>
-      </ul>
-      
-      <blockquote>
-        <p>"El derecho laboral debe evolucionar para proteger a los trabajadores en un mundo donde las fronteras entre empleado y contratista independiente se difuminan."</p>
-      </blockquote>
-    `,
-    date: "5 de enero, 2025",
-    category: "Derecho",
-    readTime: "11 min de lectura",
-    gradientClass: "gradient-violet-red",
-  },
-  {
-    id: 6,
-    title: "Política Fiscal y Desigualdad: Un Análisis Comparativo",
-    excerpt: "Examen de diferentes estrategias fiscales y su efectividad para reducir la desigualdad económica.",
-    fullContent: `
-      <p>La política fiscal se ha convertido en una herramienta fundamental para abordar la creciente desigualdad económica. Este análisis examina diferentes enfoques y su efectividad.</p>
-      
-      <h2>Instrumentos Fiscales</h2>
-      <p>Los gobiernos disponen de diversas herramientas fiscales para redistribuir la riqueza y promover la equidad social.</p>
-      
-      <h3>Estrategias Redistributivas</h3>
-      <ul>
-        <li>Impuestos progresivos sobre la renta</li>
-        <li>Impuestos a la riqueza y herencias</li>
-        <li>Transferencias sociales dirigidas</li>
-        <li>Inversión pública en servicios universales</li>
-      </ul>
-      
-      <blockquote>
-        <p>"Una política fiscal efectiva debe equilibrar los objetivos de crecimiento económico con la necesidad de reducir la desigualdad."</p>
-      </blockquote>
-    `,
-    date: "3 de enero, 2025",
-    category: "Economía",
-    readTime: "9 min de lectura",
-    gradientClass: "gradient-blue-red",
-  },
-  {
-    id: 7,
-    title: "Constitucionalismo Verde: Derechos Ambientales en la Constitución",
-    excerpt: "Análisis del reconocimiento constitucional de los derechos ambientales y su implementación práctica.",
-    fullContent: `
-      <p>El constitucionalismo verde representa una evolución significativa en el derecho constitucional contemporáneo. La incorporación de derechos ambientales en las constituciones nacionales refleja una creciente conciencia sobre la crisis ecológica.</p>
-      
-      <h2>Marco Constitucional Ambiental</h2>
-      <p>La constitucionalización de los derechos ambientales ha creado nuevos marcos para la protección del medio ambiente y la sostenibilidad.</p>
-      
-      <h3>Desarrollos Jurisprudenciales</h3>
-      <ul>
-        <li>Reconocimiento de derechos de la naturaleza</li>
-        <li>Principio de sostenibilidad intergeneracional</li>
-        <li>Obligaciones estatales de protección ambiental</li>
-        <li>Participación ciudadana en decisiones ambientales</li>
-      </ul>
-      
-      <blockquote>
-        <p>"Los derechos ambientales constitucionales representan un cambio paradigmático hacia un modelo de desarrollo sostenible y equitativo."</p>
-      </blockquote>
-    `,
-    date: "1 de enero, 2025",
-    category: "Derecho",
-    readTime: "13 min de lectura",
-    gradientClass: "gradient-red-blue",
-  },
-  {
-    id: 8,
-    title: "Geopolítica Económica: Bloques Comerciales en el Siglo XXI",
-    excerpt: "Análisis de la reconfiguración de los bloques comerciales y su impacto en la economía global.",
-    fullContent: `
-      <p>La economía global está experimentando una reconfiguración fundamental de sus bloques comerciales. Las tensiones geopolíticas están redefiniendo las alianzas económicas tradicionales.</p>
-      
-      <h2>Nuevas Dinámicas Comerciales</h2>
-      <p>El surgimiento de nuevos polos de poder económico está alterando los patrones comerciales establecidos durante la era de la globalización.</p>
-      
-      <h3>Impactos Regionales</h3>
-      <ul>
-        <li>Reconfiguración de cadenas de suministro</li>
-        <li>Competencia entre modelos económicos</li>
-        <li>Implicaciones para países de renta media</li>
-        <li>Nuevas formas de cooperación Sur-Sur</li>
-      </ul>
-      
-      <blockquote>
-        <p>"La nueva geopolítica económica requiere estrategias flexibles y diversificadas para navegar un mundo multipolar."</p>
-      </blockquote>
-    `,
-    date: "28 de diciembre, 2024",
-    category: "Economía",
-    readTime: "14 min de lectura",
-    gradientClass: "gradient-blue-violet",
-  },
-  {
-    id: 9,
-    title: "Crisis de Representación: Partidos Políticos y Democracia",
-    excerpt: "Examen de la crisis de los partidos políticos tradicionales y el surgimiento de nuevos movimientos.",
-    fullContent: `
-      <p>Los partidos políticos tradicionales enfrentan una crisis de legitimidad sin precedentes. El surgimiento de nuevos movimientos políticos refleja un cambio profundo en las preferencias ciudadanas.</p>
-      
-      <h2>Factores de la Crisis</h2>
-      <p>Múltiples factores confluyen para explicar la erosión de la confianza en los partidos políticos establecidos.</p>
-      
-      <h3>Nuevos Actores Políticos</h3>
-      <ul>
-        <li>Movimientos ciudadanos independientes</li>
-        <li>Partidos anti-sistema</li>
-        <li>Liderazgos personalizados</li>
-        <li>Plataformas digitales de participación</li>
-      </ul>
-      
-      <blockquote>
-        <p>"La renovación democrática requiere partidos políticos que reconecten con las demandas ciudadanas del siglo XXI."</p>
-      </blockquote>
-    `,
-    date: "25 de diciembre, 2024",
-    category: "Política",
-    readTime: "12 min de lectura",
-    gradientClass: "gradient-violet-red",
-  },
-]
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState("inicio")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [expandedArticle, setExpandedArticle] = useState<number | null>(null)
   const [displayedArticles, setDisplayedArticles] = useState<Article[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
@@ -313,12 +52,15 @@ export default function HomePage() {
     "gradient-violet-red",
   ]
 
+  // Convert articlesData to the format expected by the homepage
+  const allArticles: Article[] = articlesData.map((article, index) => ({
+    ...article,
+    gradientClass: gradientClasses[index % gradientClasses.length],
+  }))
+
   // Initialize displayed articles
   useEffect(() => {
-    const initialArticles = allArticles.slice(0, articlesPerPage).map((article, index) => ({
-      ...article,
-      gradientClass: gradientClasses[index % gradientClasses.length],
-    }))
+    const initialArticles = allArticles.slice(0, articlesPerPage)
     setDisplayedArticles(initialArticles)
   }, [])
 
@@ -340,10 +82,7 @@ export default function HomePage() {
       const nextPage = currentPage + 1
       const startIndex = (nextPage - 1) * articlesPerPage
       const endIndex = nextPage * articlesPerPage
-      const newArticles = currentArticles.slice(startIndex, endIndex).map((article, index) => ({
-        ...article,
-        gradientClass: gradientClasses[(startIndex + index) % gradientClasses.length],
-      }))
+      const newArticles = currentArticles.slice(startIndex, endIndex)
 
       setDisplayedArticles((prev) => [...prev, ...newArticles])
       setCurrentPage(nextPage)
@@ -356,7 +95,6 @@ export default function HomePage() {
     setIsLoading(true)
     setSelectedCategory(category)
     setCurrentPage(1)
-    setExpandedArticle(null) // Close any expanded article
 
     setTimeout(() => {
       const articlesToShow =
@@ -364,12 +102,7 @@ export default function HomePage() {
           ? allArticles.slice(0, articlesPerPage)
           : allArticles.filter((article) => article.category === category).slice(0, articlesPerPage)
 
-      const articlesWithGradients = articlesToShow.map((article, index) => ({
-        ...article,
-        gradientClass: gradientClasses[index % gradientClasses.length],
-      }))
-
-      setDisplayedArticles(articlesWithGradients)
+      setDisplayedArticles(articlesToShow)
       setIsLoading(false)
 
       // Scroll to articles section
@@ -432,14 +165,6 @@ export default function HomePage() {
     setIsMobileMenuOpen(false) // Close mobile menu after navigation
   }
 
-  const toggleArticle = (articleId: number) => {
-    if (expandedArticle === articleId) {
-      setExpandedArticle(null)
-    } else {
-      setExpandedArticle(articleId)
-    }
-  }
-
   const categories = [
     {
       name: "Derecho",
@@ -448,6 +173,11 @@ export default function HomePage() {
       articles: allArticles.filter((article) => article.category === "Derecho").length,
       description: "Análisis jurídico y constitucional",
       color: "red",
+      bgColor: "bg-[#ff6b35]/20",
+      borderColor: "border-[#ff6b35]/30",
+      textColor: "text-[#ff6b35]",
+      hoverBg: "group-hover:bg-[#ff6b35]/30",
+      hoverText: "group-hover:text-[#ff8c5a]",
     },
     {
       name: "Política",
@@ -456,6 +186,11 @@ export default function HomePage() {
       articles: allArticles.filter((article) => article.category === "Política").length,
       description: "Política nacional e internacional",
       color: "blue",
+      bgColor: "bg-[#dc143c]/20",
+      borderColor: "border-[#dc143c]/30",
+      textColor: "text-[#dc143c]",
+      hoverBg: "group-hover:bg-[#dc143c]/30",
+      hoverText: "group-hover:text-[#ff4757]",
     },
     {
       name: "Economía",
@@ -463,7 +198,12 @@ export default function HomePage() {
       icon: TrendingUp,
       articles: allArticles.filter((article) => article.category === "Economía").length,
       description: "Economía política y social",
-      color: "red",
+      color: "purple",
+      bgColor: "bg-[#ff6b35]/20",
+      borderColor: "border-[#ff6b35]/30",
+      textColor: "text-[#ff6b35]",
+      hoverBg: "group-hover:bg-[#ff6b35]/30",
+      hoverText: "group-hover:text-[#ff8c5a]",
     },
   ]
 
@@ -489,8 +229,8 @@ export default function HomePage() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`text-sm font-medium transition-all duration-200 hover:text-[#1e90ff] focus:text-[#1e90ff] focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent px-3 py-2 rounded-md ${
-                    activeSection === item.id ? "text-[#1e90ff]" : "text-[#eaeaea]"
+                  className={`text-sm font-medium transition-all duration-200 hover:text-[#ff6b35] focus:text-[#ff6b35] focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent px-3 py-2 rounded-md ${
+                    activeSection === item.id ? "text-[#ff6b35]" : "text-[#eaeaea]"
                   }`}
                 >
                   {item.label}
@@ -501,7 +241,7 @@ export default function HomePage() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden mobile-menu-trigger p-2 text-white hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent rounded-md"
+              className="md:hidden mobile-menu-trigger p-2 text-white hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent rounded-md"
               aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -532,7 +272,7 @@ export default function HomePage() {
                 <h2 className="text-xl font-bold text-white">Navegación</h2>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-white hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent rounded-md"
+                  className="p-2 text-white hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent rounded-md"
                   aria-label="Cerrar menú"
                 >
                   <X className="h-6 w-6" />
@@ -544,8 +284,8 @@ export default function HomePage() {
                     <li key={item.id}>
                       <button
                         onClick={() => scrollToSection(item.id)}
-                        className={`w-full text-left text-lg font-medium transition-all duration-200 hover:text-[#1e90ff] focus:text-[#1e90ff] focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent px-4 py-3 rounded-md hover:bg-white/5 focus:bg-white/5 ${
-                          activeSection === item.id ? "text-[#1e90ff] bg-white/10" : "text-[#eaeaea]"
+                        className={`w-full text-left text-lg font-medium transition-all duration-200 hover:text-[#ff6b35] focus:text-[#ff6b35] focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent px-4 py-3 rounded-md hover:bg-white/5 focus:bg-white/5 ${
+                          activeSection === item.id ? "text-[#ff6b35] bg-white/10" : "text-[#eaeaea]"
                         }`}
                       >
                         {item.label}
@@ -617,7 +357,7 @@ export default function HomePage() {
               <div className="mt-6">
                 <button
                   onClick={() => handleCategoryFilter("all")}
-                  className="inline-flex items-center px-4 py-2 bg-white/10 hover:bg-white/20 focus:bg-white/20 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent"
+                  className="inline-flex items-center px-4 py-2 bg-white/10 hover:bg-white/20 focus:bg-white/20 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent"
                 >
                   <X className="w-4 h-4 mr-2" />
                   Mostrar todos los artículos
@@ -635,7 +375,7 @@ export default function HomePage() {
                 exit={{ opacity: 0 }}
                 className="flex items-center justify-center py-8"
               >
-                <div className="flex items-center space-x-3 text-[#1e90ff]">
+                <div className="flex items-center space-x-3 text-[#ff6b35]">
                   <Loader2 className="w-6 h-6 animate-spin" />
                   <span className="text-lg font-medium">Cargando artículos...</span>
                 </div>
@@ -655,112 +395,39 @@ export default function HomePage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className={`post-card ${post.gradientClass} rounded-2xl border border-white/10 overflow-hidden`}
                 >
-                  {/* Article Preview */}
-                  <button
-                    onClick={() => toggleArticle(post.id)}
-                    className="w-full p-8 text-left hover:bg-white/5 focus:bg-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent"
-                  >
-                    <div className="space-y-6">
-                      <h3 className="text-3xl md:text-4xl font-bold text-white post-title-glow leading-tight">
+                  <div className="p-6 md:p-8">
+                    <div className="space-y-4 md:space-y-6">
+                      <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white post-title-glow leading-tight">
                         {post.title}
                       </h3>
 
-                      <p className="text-lg text-[#eaeaea] leading-relaxed max-w-4xl">{post.excerpt}</p>
+                      <p className="text-base md:text-lg text-[#eaeaea] leading-relaxed">{post.excerpt}</p>
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-sm text-[#d3d3d3]">
-                          <span className="flex items-center space-x-1">
-                            <Calendar className="w-4 h-4" />
-                            <span>{post.date}</span>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-[#d3d3d3]">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3 md:w-4 md:h-4" />
+                            <span className="whitespace-nowrap">{post.date}</span>
                           </span>
-                          <span>•</span>
-                          <span>{post.category}</span>
-                          <span>•</span>
-                          <span className="flex items-center space-x-1">
-                            <Clock className="w-4 h-4" />
-                            <span>{post.readTime}</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span className="whitespace-nowrap">{post.category}</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3 h-3 md:w-4 md:h-4" />
+                            <span className="whitespace-nowrap">{post.readTime}</span>
                           </span>
                         </div>
 
-                        <div className="read-more-link text-lg font-medium flex items-center space-x-2 group">
-                          <span>{expandedArticle === post.id ? "Leer menos" : "Leer más"}</span>
-                          <motion.div
-                            animate={{ rotate: expandedArticle === post.id ? 90 : 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <ChevronRight className="w-5 h-5" />
-                          </motion.div>
-                        </div>
+                        <Link
+                          href={`/articulos/${post.slug}`}
+                          className="read-more-link text-base md:text-lg font-medium flex items-center space-x-2 group self-start sm:self-auto"
+                        >
+                          <span>Leer más</span>
+                          <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </div>
                     </div>
-                  </button>
-
-                  {/* Expanded Article Content */}
-                  <AnimatePresence>
-                    {expandedArticle === post.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-8 pb-8 border-t border-white/10">
-                          <div className="pt-8">
-                            {/* Article Header */}
-                            <div className="mb-8">
-                              <div className="flex items-center justify-between mb-6">
-                                <span className="inline-block px-3 py-1 bg-[#dc143c]/20 text-[#dc143c] rounded-full text-sm font-medium border border-[#dc143c]/30">
-                                  {post.category}
-                                </span>
-                                <button
-                                  onClick={() => setExpandedArticle(null)}
-                                  className="flex items-center space-x-2 px-4 py-2 bg-white/10 hover:bg-white/20 focus:bg-white/20 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent"
-                                >
-                                  <ChevronUp className="w-4 h-4" />
-                                  <span>Cerrar</span>
-                                </button>
-                              </div>
-
-                              <div className="flex items-center space-x-6 text-[#d3d3d3] mb-6">
-                                <div className="flex items-center space-x-2">
-                                  <User className="w-4 h-4" />
-                                  <span>López Labrin Lautaro</span>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Calendar className="w-4 h-4" />
-                                  <span>{post.date}</span>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <Clock className="w-4 h-4" />
-                                  <span>{post.readTime}</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Article Content */}
-                            <div className="max-w-4xl mx-auto">
-                              <div
-                                className="article-content prose prose-lg prose-invert max-w-none text-[#eaeaea] leading-relaxed"
-                                dangerouslySetInnerHTML={{ __html: post.fullContent }}
-                              />
-                            </div>
-
-                            {/* Close Button at Bottom */}
-                            <div className="mt-12 text-center">
-                              <button
-                                onClick={() => setExpandedArticle(null)}
-                                className="inline-flex items-center space-x-2 px-6 py-3 bg-[#dc143c] hover:bg-[#b91c3c] focus:bg-[#b91c3c] text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#dc143c] focus:ring-offset-2 focus:ring-offset-transparent font-semibold"
-                              >
-                                <ChevronUp className="w-5 h-5" />
-                                <span>Cerrar Artículo</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  </div>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -771,7 +438,7 @@ export default function HomePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mt-12">
               <button
                 onClick={loadMoreArticles}
-                className="px-8 py-4 bg-[#dc143c] text-white font-semibold rounded-lg hover:bg-[#b91c3c] focus:bg-[#b91c3c] transition-all duration-200 border-2 border-[#dc143c] hover:border-[#b91c3c] focus:border-[#b91c3c] focus:outline-none focus:ring-2 focus:ring-[#dc143c] focus:ring-offset-2 focus:ring-offset-transparent"
+                className="px-8 py-4 bg-[#ff6b35] text-white font-semibold rounded-lg hover:bg-[#dc143c] focus:bg-[#dc143c] transition-all duration-200 border-2 border-[#ff6b35] hover:border-[#dc143c] focus:border-[#dc143c] focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent"
               >
                 Cargar más artículos
               </button>
@@ -788,7 +455,7 @@ export default function HomePage() {
               {selectedCategory !== "all" && (
                 <button
                   onClick={() => handleCategoryFilter("all")}
-                  className="mt-4 px-6 py-3 bg-white/10 hover:bg-white/20 focus:bg-white/20 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent"
+                  className="mt-4 px-6 py-3 bg-white/10 hover:bg-white/20 focus:bg-white/20 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent"
                 >
                   Ver todos los artículos
                 </button>
@@ -813,31 +480,23 @@ export default function HomePage() {
                 <button
                   key={category.name}
                   onClick={() => handleCategoryFilter(category.key)}
-                  className={`category-card bg-[#1c1c1c] p-8 rounded-lg border border-white/10 text-center group cursor-pointer hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent ${
-                    selectedCategory === category.key ? "ring-2 ring-[#1e90ff] bg-[#2a2a2a]" : ""
+                  className={`category-card bg-[#1c1c1c] p-8 rounded-lg border border-white/10 text-center group cursor-pointer hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent ${
+                    selectedCategory === category.key ? "ring-2 ring-[#ff6b35] bg-[#2a2a2a]" : ""
                   }`}
                 >
                   <div
-                    className={`w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center transition-all duration-200 ${
-                      category.color === "red"
-                        ? "bg-[#dc143c]/20 border border-[#dc143c]/30 group-hover:bg-[#dc143c]/30 group-focus:bg-[#dc143c]/30"
-                        : "bg-[#1e90ff]/20 border border-[#1e90ff]/30 group-hover:bg-[#1e90ff]/30 group-focus:bg-[#1e90ff]/30"
-                    }`}
+                    className={`w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center transition-all duration-200 ${category.bgColor} border ${category.borderColor} ${category.hoverBg}`}
                   >
                     <IconComponent
-                      className={`w-8 h-8 transition-all duration-200 ${
-                        category.color === "red"
-                          ? "text-[#dc143c] group-hover:text-[#ff4757] group-focus:text-[#ff4757]"
-                          : "text-[#1e90ff] group-hover:text-[#4dabf7] group-focus:text-[#4dabf7]"
-                      }`}
+                      className={`w-8 h-8 transition-all duration-200 ${category.textColor} ${category.hoverText}`}
                     />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-[#1e90ff] group-focus:text-[#1e90ff] transition-colors duration-200">
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-[#ff6b35] group-focus:text-[#ff6b35] transition-colors duration-200">
                     {category.name}
                   </h3>
                   <p className="text-[#d3d3d3] mb-4">{category.description}</p>
                   <p className="text-sm text-[#eaeaea] mb-6">{category.articles} artículos</p>
-                  <span className="text-[#1e90ff] font-semibold group-hover:text-white group-focus:text-white transition-colors duration-200">
+                  <span className="text-[#ff6b35] font-semibold group-hover:text-white group-focus:text-white transition-colors duration-200">
                     VER ARTÍCULOS →
                   </span>
                 </button>
@@ -886,7 +545,7 @@ export default function HomePage() {
                   profesional y publicaciones en el ámbito del derecho y la política.
                 </p>
                 <div className="text-center">
-                  <button className="px-8 py-4 bg-[#1e90ff] text-white font-semibold rounded-lg hover:bg-[#1c7ed6] focus:bg-[#1c7ed6] transition-all duration-200 border-2 border-[#1e90ff] hover:border-[#1c7ed6] focus:border-[#1c7ed6] focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent">
+                  <button className="px-8 py-4 bg-[#ff6b35] text-white font-semibold rounded-lg hover:bg-[#dc143c] focus:bg-[#dc143c] transition-all duration-200 border-2 border-[#ff6b35] hover:border-[#dc143c] focus:border-[#dc143c] focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent">
                     Descargar CV
                   </button>
                 </div>
@@ -916,7 +575,7 @@ export default function HomePage() {
                   <input
                     type="text"
                     id="name"
-                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff] transition-all duration-200"
+                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35] transition-all duration-200"
                     placeholder="Tu nombre completo"
                   />
                 </div>
@@ -927,7 +586,7 @@ export default function HomePage() {
                   <input
                     type="email"
                     id="email"
-                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff] transition-all duration-200"
+                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35] transition-all duration-200"
                     placeholder="tu@email.com"
                   />
                 </div>
@@ -938,7 +597,7 @@ export default function HomePage() {
                   <input
                     type="text"
                     id="subject"
-                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff] transition-all duration-200"
+                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35] transition-all duration-200"
                     placeholder="Asunto del mensaje"
                   />
                 </div>
@@ -949,13 +608,13 @@ export default function HomePage() {
                   <textarea
                     id="message"
                     rows={5}
-                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff] resize-none transition-all duration-200"
+                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35] resize-none transition-all duration-200"
                     placeholder="Escribe tu mensaje aquí..."
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-[#1e90ff] text-white font-semibold rounded-lg hover:bg-[#1c7ed6] focus:bg-[#1c7ed6] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent"
+                  className="w-full px-6 py-3 bg-[#ff6b35] text-white font-semibold rounded-lg hover:bg-[#dc143c] focus:bg-[#dc143c] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent"
                 >
                   Enviar Mensaje
                 </button>
@@ -967,8 +626,8 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-white mb-6 uppercase">Información de Contacto</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[#dc143c]/20 p-3 rounded-lg border border-[#dc143c]/30">
-                    <Mail className="h-6 w-6 text-[#dc143c]" />
+                  <div className="bg-[#ff6b35]/20 p-3 rounded-lg border border-[#ff6b35]/30">
+                    <Mail className="h-6 w-6 text-[#ff6b35]" />
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1">Email</h4>
@@ -976,8 +635,8 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[#1e90ff]/20 p-3 rounded-lg border border-[#1e90ff]/30">
-                    <Phone className="h-6 w-6 text-[#1e90ff]" />
+                  <div className="bg-[#dc143c]/20 p-3 rounded-lg border border-[#dc143c]/30">
+                    <Phone className="h-6 w-6 text-[#dc143c]" />
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1">Teléfono</h4>
@@ -985,8 +644,8 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[#dc143c]/20 p-3 rounded-lg border border-[#dc143c]/30">
-                    <MapPin className="h-6 w-6 text-[#dc143c]" />
+                  <div className="bg-[#ff6b35]/20 p-3 rounded-lg border border-[#ff6b35]/30">
+                    <MapPin className="h-6 w-6 text-[#ff6b35]" />
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1">Ubicación</h4>
@@ -1022,25 +681,25 @@ export default function HomePage() {
               <div className="flex space-x-4">
                 <a
                   href="#"
-                  className="text-[#d3d3d3] hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
+                  className="text-[#d3d3d3] hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
                 >
                   <Facebook className="w-6 h-6" />
                 </a>
                 <a
                   href="#"
-                  className="text-[#d3d3d3] hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
+                  className="text-[#d3d3d3] hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
                 >
                   <Twitter className="w-6 h-6" />
                 </a>
                 <a
                   href="#"
-                  className="text-[#d3d3d3] hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
+                  className="text-[#d3d3d3] hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
                 >
                   <Instagram className="w-6 h-6" />
                 </a>
                 <a
                   href="#"
-                  className="text-[#d3d3d3] hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
+                  className="text-[#d3d3d3] hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent rounded-md p-1"
                 >
                   <Mail className="w-6 h-6" />
                 </a>
@@ -1055,7 +714,7 @@ export default function HomePage() {
                   <li key={item.id}>
                     <button
                       onClick={() => scrollToSection(item.id)}
-                      className="text-[#d3d3d3] hover:text-[#1e90ff] focus:text-[#1e90ff] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e90ff] focus:ring-offset-2 focus:ring-offset-transparent px-2 py-1 rounded-md"
+                      className="text-[#d3d3d3] hover:text-[#ff6b35] focus:text-[#ff6b35] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent px-2 py-1 rounded-md"
                     >
                       {item.label}
                     </button>
@@ -1074,11 +733,11 @@ export default function HomePage() {
                 <input
                   type="email"
                   placeholder="Tu email"
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff] transition-all duration-200"
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35] transition-all duration-200"
                 />
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-[#dc143c] text-white font-semibold rounded-lg hover:bg-[#b91c3c] focus:bg-[#b91c3c] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#dc143c] focus:ring-offset-2 focus:ring-offset-transparent"
+                  className="w-full px-6 py-3 bg-[#ff6b35] text-white font-semibold rounded-lg hover:bg-[#dc143c] focus:bg-[#dc143c] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#ff6b35] focus:ring-offset-2 focus:ring-offset-transparent"
                 >
                   SUSCRIBIRSE
                 </button>

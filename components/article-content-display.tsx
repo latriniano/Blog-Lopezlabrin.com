@@ -1,67 +1,69 @@
+import { Calendar, Clock, User } from "lucide-react"
+
 interface ArticleContentDisplayProps {
   title: string
-  author: string
-  publishDate: string
-  category?: string
-  readingTime?: string
   content: string
+  date: string
+  category: string
+  readTime: string
+  author: string
 }
 
-/**
- * Article Content Display Component
- * Renders the full content of an article with metadata
- */
-export default function ArticleContentDisplay({
+export function ArticleContentDisplay({
   title,
-  author,
-  publishDate,
-  category,
-  readingTime,
   content,
+  date,
+  category,
+  readTime,
+  author,
 }: ArticleContentDisplayProps) {
+  const getCategoryColor = (category: string) => {
+    switch (category.toLowerCase()) {
+      case "derecho":
+        return "bg-[#dc143c]/20 text-[#dc143c] border-[#dc143c]/30"
+      case "política":
+        return "bg-[#1e90ff]/20 text-[#1e90ff] border-[#1e90ff]/30"
+      case "economía":
+        return "bg-[#6a1b9a]/20 text-[#6a1b9a] border-[#6a1b9a]/30"
+      default:
+        return "bg-[#dc143c]/20 text-[#dc143c] border-[#dc143c]/30"
+    }
+  }
+
   return (
-    <article className="mb-12">
+    <div className="max-w-4xl mx-auto px-4 py-12">
       {/* Article Header */}
-      <header className="mb-8 border-b-4 border-black pb-8">
-        {/* Category Badge */}
-        {category && (
-          <div className="mb-4">
-            <span className="inline-block px-4 py-2 text-sm font-black text-white bg-brand-orange border-2 border-black shadow-brand-sm uppercase">
-              {category}
-            </span>
-          </div>
-        )}
+      <header className="mb-12">
+        <div className="mb-6">
+          <span
+            className={`inline-block px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(category)}`}
+          >
+            {category}
+          </span>
+        </div>
 
-        {/* Article Title */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-black mb-6 leading-tight">{title}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight post-title-glow">{title}</h1>
 
-        {/* Article Metadata */}
-        <div className="flex flex-wrap items-center text-brand-gray-700 gap-x-6 gap-y-2">
-          <div className="flex items-center">
-            <span className="font-bold">Por:</span>
-            <span className="ml-2">{author}</span>
+        <div className="flex items-center space-x-6 text-[#d3d3d3]">
+          <div className="flex items-center space-x-2">
+            <User className="w-4 h-4" />
+            <span>{author}</span>
           </div>
-          <div className="flex items-center">
-            <span className="font-bold">Publicado:</span>
-            <time dateTime={publishDate} className="ml-2">
-              {new Date(publishDate).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </time>
+          <div className="flex items-center space-x-2">
+            <Calendar className="w-4 h-4" />
+            <span>{date}</span>
           </div>
-          {readingTime && (
-            <div className="flex items-center">
-              <span className="font-bold">Tiempo de lectura:</span>
-              <span className="ml-2">{readingTime}</span>
-            </div>
-          )}
+          <div className="flex items-center space-x-2">
+            <Clock className="w-4 h-4" />
+            <span>{readTime}</span>
+          </div>
         </div>
       </header>
 
-      {/* Article Content */}
-      <div className="article-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
-    </article>
+      {/* Article Body */}
+      <article className="prose prose-lg prose-invert max-w-none">
+        <div className="text-[#eaeaea] leading-relaxed space-y-6" dangerouslySetInnerHTML={{ __html: content }} />
+      </article>
+    </div>
   )
 }

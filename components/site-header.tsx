@@ -2,82 +2,93 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
 import Image from "next/image"
+import { Menu, X, Search } from "lucide-react"
 
-/**
- * Site Header Component - Leyes al Pedo Rebrand
- * Bold, graphic design with orange accents and clean typography
- */
-export default function SiteHeader() {
+export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-
   return (
-    <header className="bg-brand-orange border-b-4 border-black sticky top-0 z-50 shadow-md">
-      <div className="container mx-auto px-4">
+    <header className="bg-[#1c1c1c] border-b border-white/10 sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo - Lap graphic logo only */}
-          <Link href="/" className="flex items-center">
-            <div className="relative h-10 w-10">
-              <Image src="/images/lap-logo.png" alt="Lap Logo" fill className="object-contain" priority />
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-3">
+            <Image src="/images/lap-logo.png" alt="López Labrin Logo" width={40} height={40} className="rounded-lg" />
+            <div className="hidden sm:block">
+              <h1 className="text-xl font-bold text-white">López Labrin</h1>
+              <p className="text-xs text-[#d3d3d3]">Análisis Jurídico</p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {[
-              { name: "Inicio", href: "/" },
-              { name: "Categorías", href: "/categorias" },
-              { name: "Acerca de", href: "/acerca-de" },
-              { name: "Contacto", href: "/contacto" },
-            ].map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="px-4 py-2 text-white hover:text-black focus:text-black font-bold text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:bg-white hover:bg-opacity-20 focus:bg-white focus:bg-opacity-20 border-2 border-transparent hover:border-white focus:border-white"
-              >
-                {item.name.toUpperCase()}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link href="/" className="text-[#d3d3d3] hover:text-white transition-colors">
+              Inicio
+            </Link>
+            <Link href="/categorias" className="text-[#d3d3d3] hover:text-white transition-colors">
+              Categorías
+            </Link>
+            <Link href="/acerca-de" className="text-[#d3d3d3] hover:text-white transition-colors">
+              Acerca de
+            </Link>
+            <Link href="/contacto" className="text-[#d3d3d3] hover:text-white transition-colors">
+              Contacto
+            </Link>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 text-white hover:text-black focus:text-black transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
-            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
+          {/* Search and Menu */}
+          <div className="flex items-center space-x-4">
+            <button className="p-2 text-[#d3d3d3] hover:text-white transition-colors">
+              <Search className="w-5 h-5" />
+            </button>
 
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-brand-orange border-t-2 border-black">
-          <nav className="flex flex-col">
-            {[
-              { name: "Inicio", href: "/" },
-              { name: "Categorías", href: "/categorias" },
-              { name: "Acerca de", href: "/acerca-de" },
-              { name: "Contacto", href: "/contacto" },
-            ].map((item) => (
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 text-[#d3d3d3] hover:text-white transition-colors"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-white/10">
+            <nav className="flex flex-col space-y-4">
               <Link
-                key={item.name}
-                href={item.href}
-                className="px-4 py-3 text-white hover:text-black focus:text-black font-bold text-base transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:bg-white hover:bg-opacity-20 focus:bg-white focus:bg-opacity-20 border-l-4 border-transparent hover:border-l-white focus:border-l-white"
+                href="/"
+                className="text-[#d3d3d3] hover:text-white transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {item.name.toUpperCase()}
+                Inicio
               </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+              <Link
+                href="/categorias"
+                className="text-[#d3d3d3] hover:text-white transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Categorías
+              </Link>
+              <Link
+                href="/acerca-de"
+                className="text-[#d3d3d3] hover:text-white transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Acerca de
+              </Link>
+              <Link
+                href="/contacto"
+                className="text-[#d3d3d3] hover:text-white transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contacto
+              </Link>
+            </nav>
+          </div>
+        )}
+      </div>
     </header>
   )
 }

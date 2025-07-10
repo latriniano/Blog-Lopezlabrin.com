@@ -2,72 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 18, 18, 18;
@@ -96,50 +30,58 @@ a {
   text-decoration: none;
 }
 
-/* Hero gradient background */
-.hero-gradient {
-  background: radial-gradient(ellipse at center, rgba(220, 20, 60, 0.1) 0%, rgba(18, 18, 18, 1) 70%);
-}
-
-/* Title glow effect */
-.title-glow {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-/* Post title glow effect */
-.post-title-glow {
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-
-/* Post card gradients */
+/* Original Orange-based Gradients for Article Cards */
 .gradient-red-blue {
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(30, 144, 255, 0.15) 100%);
-  border: 1px solid rgba(220, 20, 60, 0.2);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(220, 20, 60, 0.15) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.2);
 }
 
 .gradient-blue-red {
-  background: linear-gradient(135deg, rgba(30, 144, 255, 0.15) 0%, rgba(220, 20, 60, 0.15) 100%);
-  border: 1px solid rgba(30, 144, 255, 0.2);
-}
-
-.gradient-red-red {
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(220, 20, 60, 0.25) 100%);
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(255, 107, 53, 0.15) 100%);
   border: 1px solid rgba(220, 20, 60, 0.2);
 }
 
+.gradient-red-red {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(255, 107, 53, 0.25) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
 .gradient-blue-violet {
-  background: linear-gradient(135deg, rgba(30, 144, 255, 0.15) 0%, rgba(138, 43, 226, 0.15) 100%);
-  border: 1px solid rgba(30, 144, 255, 0.2);
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(255, 107, 53, 0.15) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.2);
 }
 
 .gradient-violet-red {
-  background: linear-gradient(135deg, rgba(138, 43, 226, 0.15) 0%, rgba(220, 20, 60, 0.15) 100%);
-  border: 1px solid rgba(138, 43, 226, 0.2);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(220, 20, 60, 0.15) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.2);
 }
 
-/* Post card hover effects */
+/* Text Effects */
+.title-glow {
+  text-shadow: 0 0 20px rgba(30, 144, 255, 0.3);
+}
+
+.post-title-glow {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Post Card Styles */
 .post-card {
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
+}
+
+.post-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  opacity: 0.1;
+  z-index: -1;
 }
 
 .post-card:hover {
@@ -147,61 +89,55 @@ a {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Category card hover effects */
-.category-card {
-  transition: all 0.3s ease;
-}
-
-.category-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(220, 20, 60, 0.5);
-  box-shadow: 0 0 20px rgba(220, 20, 60, 0.3);
-}
-
-/* Read more link styling */
+/* Read More Link */
 .read-more-link {
-  color: #1e90ff;
+  color: #ff6b35;
   transition: all 0.3s ease;
 }
 
 .read-more-link:hover {
-  color: #87ceeb;
-  text-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
 }
 
-/* Brand font class */
-.brand-font {
-  font-family: "Inter", system-ui, sans-serif;
-  font-weight: 700;
+/* Category Card Styles */
+.category-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+.category-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(220, 20, 60, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+.category-card:hover::before {
+  opacity: 1;
 }
 
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
+.category-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 107, 53, 0.5);
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #dc143c;
-  border-radius: 4px;
+/* Gradient Background for Hero (keep the new background) */
+.bg-gradient-radial {
+  background: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #b91c3c;
-}
-
-/* Article Content Styles for López Labrin Dark Theme */
+/* Article Content Styles */
 .article-content {
-  color: #eaeaea;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .article-content h1,
@@ -211,120 +147,160 @@ html {
 .article-content h5,
 .article-content h6 {
   color: #ffffff;
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px rgba(234, 234, 234, 0.3);
 }
 
 .article-content h1 {
   font-size: 2.5rem;
-  margin-top: 0;
+  line-height: 1.2;
 }
 
 .article-content h2 {
   font-size: 2rem;
+  line-height: 1.3;
+  border-bottom: 2px solid rgba(255, 107, 53, 0.3);
+  padding-bottom: 0.5rem;
 }
 
 .article-content h3 {
   font-size: 1.5rem;
+  line-height: 1.4;
+  color: #ff6b35;
 }
 
 .article-content p {
-  margin-bottom: 1.5rem;
   color: #eaeaea;
-}
-
-.article-content a {
-  color: #1e90ff;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.article-content a:hover {
-  color: #87ceeb;
-  text-shadow: 0 0 8px rgba(30, 144, 255, 0.4);
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
 }
 
 .article-content blockquote {
-  border-left: 4px solid #8a2be2;
-  padding-left: 1.5rem;
+  border-left: 4px solid #ff6b35;
+  background: rgba(255, 107, 53, 0.1);
+  padding: 1.5rem;
   margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.article-content blockquote p {
+  color: #ffffff;
   font-style: italic;
-  color: #d3d3d3;
-  background: rgba(138, 43, 226, 0.1);
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
+  font-size: 1.25rem;
+  margin-bottom: 0;
 }
 
 .article-content ul,
 .article-content ol {
+  color: #eaeaea;
   margin: 1.5rem 0;
   padding-left: 2rem;
 }
 
 .article-content li {
   margin-bottom: 0.5rem;
-  color: #eaeaea;
+  font-size: 1.125rem;
+}
+
+.article-content ul li {
+  list-style-type: disc;
+}
+
+.article-content ol li {
+  list-style-type: decimal;
+}
+
+.article-content a {
+  color: #ff6b35;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.article-content a:hover {
+  color: #ff8c5a;
 }
 
 .article-content code {
-  background: rgba(138, 43, 226, 0.2);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-family: "Courier New", monospace;
+  color: #ff6b35;
 }
 
 .article-content pre {
-  background: #1a1a1a;
-  color: #eaeaea;
+  background: rgba(0, 0, 0, 0.5);
   padding: 1.5rem;
   border-radius: 8px;
   overflow-x: auto;
-  margin: 2rem 0;
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  margin: 1.5rem 0;
 }
 
 .article-content pre code {
-  background: transparent;
+  background: none;
   padding: 0;
+  color: #eaeaea;
 }
 
-.article-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin: 2rem 0;
-  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
-}
-
-.article-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
-  background: rgba(26, 26, 26, 0.8);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.article-content th,
-.article-content td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid rgba(138, 43, 226, 0.3);
-}
-
-.article-content th {
-  background: rgba(138, 43, 226, 0.2);
+.article-content strong {
   color: #ffffff;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-.article-content hr {
-  border: none;
-  height: 2px;
-  background: linear-gradient(90deg, #dc143c, #8a2be2, #1e90ff);
-  margin: 3rem 0;
-  border-radius: 1px;
+.article-content em {
+  font-style: italic;
+  color: #ff6b35;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .article-content h1 {
+    font-size: 2rem;
+  }
+
+  .article-content h2 {
+    font-size: 1.75rem;
+  }
+
+  .article-content h3 {
+    font-size: 1.25rem;
+  }
+
+  .article-content p,
+  .article-content li {
+    font-size: 1rem;
+  }
+
+  .article-content blockquote p {
+    font-size: 1.125rem;
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus Styles */
+*:focus {
+  outline: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1c1c1c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff6b35;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #dc143c;
 }

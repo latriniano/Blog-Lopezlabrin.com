@@ -1,7 +1,20 @@
 "use client"
 
 import { useState } from "react"
-import { Bold, Italic, List, Quote, Link, ImageIcon } from "lucide-react"
+import {
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
+  Quote,
+  Link,
+  ImageIcon,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+} from "lucide-react"
 
 interface RichTextEditorProps {
   value: string
@@ -9,90 +22,153 @@ interface RichTextEditorProps {
   placeholder?: string
 }
 
-export function RichTextEditor({ value, onChange, placeholder = "Escribe tu artículo..." }: RichTextEditorProps) {
-  const [isPreview, setIsPreview] = useState(false)
+export function RichTextEditor({ value, onChange, placeholder = "Escribe tu contenido..." }: RichTextEditorProps) {
+  const [selectedText, setSelectedText] = useState("")
 
-  const insertFormatting = (before: string, after = "") => {
-    const textarea = document.querySelector("textarea") as HTMLTextAreaElement
-    if (!textarea) return
-
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const selectedText = value.substring(start, end)
-    const newText = value.substring(0, start) + before + selectedText + after + value.substring(end)
-
-    onChange(newText)
-
-    // Restore cursor position
-    setTimeout(() => {
-      textarea.focus()
-      textarea.setSelectionRange(start + before.length, start + before.length + selectedText.length)
-    }, 0)
+  const formatText = (command: string, value?: string) => {
+    document.execCommand(command, false, value)
   }
 
-  const toolbarButtons = [
-    { icon: Bold, action: () => insertFormatting("**", "**"), title: "Negrita" },
-    { icon: Italic, action: () => insertFormatting("*", "*"), title: "Cursiva" },
-    { icon: List, action: () => insertFormatting("\n- "), title: "Lista" },
-    { icon: Quote, action: () => insertFormatting("\n> "), title: "Cita" },
-    { icon: Link, action: () => insertFormatting("[", "](url)"), title: "Enlace" },
-    { icon: ImageIcon, action: () => insertFormatting("![alt](", ")"), title: "Imagen" },
-  ]
+  const insertLink = () => {
+    const url = prompt("Ingresa la URL:")
+    if (url) {
+      formatText("createLink", url)
+    }
+  }
+
+  const insertImage = () => {
+    const url = prompt("Ingresa la URL de la imagen:")
+    if (url) {
+      formatText("insertImage", url)
+    }
+  }
 
   return (
-    <div className="border border-gray-700 rounded-lg bg-[#1a1a1a] overflow-hidden">
+    <div className="border border-white/20 rounded-lg overflow-hidden bg-[#2a2a2a]">
       {/* Toolbar */}
-      <div className="flex items-center justify-between p-3 border-b border-gray-700">
-        <div className="flex items-center space-x-2">
-          {toolbarButtons.map((button, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={button.action}
-              title={button.title}
-              className="p-2 text-[#d3d3d3] hover:text-white hover:bg-gray-700 rounded transition-colors"
-            >
-              <button.icon className="w-4 h-4" />
-            </button>
-          ))}
-        </div>
-
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-1 p-3 border-b border-white/20 bg-[#1c1c1c]">
+        <div className="flex items-center space-x-1">
           <button
-            type="button"
-            onClick={() => setIsPreview(false)}
-            className={`px-3 py-1 text-sm rounded transition-colors ${
-              !isPreview ? "bg-[#8a2be2] text-white" : "text-[#d3d3d3] hover:text-white"
-            }`}
+            onClick={() => formatText("bold")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Negrita"
           >
-            Editar
+            <Bold className="w-4 h-4" />
           </button>
           <button
-            type="button"
-            onClick={() => setIsPreview(true)}
-            className={`px-3 py-1 text-sm rounded transition-colors ${
-              isPreview ? "bg-[#8a2be2] text-white" : "text-[#d3d3d3] hover:text-white"
-            }`}
+            onClick={() => formatText("italic")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Cursiva"
           >
-            Vista previa
+            <Italic className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => formatText("underline")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Subrayado"
+          >
+            <Underline className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="w-px h-6 bg-white/20 mx-2"></div>
+
+        <div className="flex items-center space-x-1">
+          <button
+            onClick={() => formatText("formatBlock", "h1")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Título 1"
+          >
+            <Heading1 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => formatText("formatBlock", "h2")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Título 2"
+          >
+            <Heading2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => formatText("formatBlock", "h3")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Título 3"
+          >
+            <Heading3 className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="w-px h-6 bg-white/20 mx-2"></div>
+
+        <div className="flex items-center space-x-1">
+          <button
+            onClick={() => formatText("insertUnorderedList")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Lista con viñetas"
+          >
+            <List className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => formatText("insertOrderedList")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Lista numerada"
+          >
+            <ListOrdered className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => formatText("formatBlock", "blockquote")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Cita"
+          >
+            <Quote className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="w-px h-6 bg-white/20 mx-2"></div>
+
+        <div className="flex items-center space-x-1">
+          <button
+            onClick={insertLink}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Insertar enlace"
+          >
+            <Link className="w-4 h-4" />
+          </button>
+          <button
+            onClick={insertImage}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Insertar imagen"
+          >
+            <ImageIcon className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => formatText("formatBlock", "pre")}
+            className="p-2 text-[#d3d3d3] hover:text-white hover:bg-[#3a3a3a] rounded transition-colors"
+            title="Código"
+          >
+            <Code className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Editor/Preview */}
-      <div className="min-h-[400px]">
-        {isPreview ? (
-          <div className="p-4 article-content">
-            <div dangerouslySetInnerHTML={{ __html: value.replace(/\n/g, "<br>") }} />
-          </div>
-        ) : (
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            className="w-full h-[400px] p-4 bg-transparent text-[#eaeaea] placeholder-[#d3d3d3] resize-none focus:outline-none"
-          />
-        )}
+      {/* Editor */}
+      <div
+        contentEditable
+        className="min-h-[300px] p-4 text-white focus:outline-none prose prose-invert max-w-none"
+        style={{
+          backgroundColor: "#2a2a2a",
+          color: "#eaeaea",
+        }}
+        onInput={(e) => {
+          const target = e.target as HTMLDivElement
+          onChange(target.innerHTML)
+        }}
+        dangerouslySetInnerHTML={{ __html: value }}
+        data-placeholder={placeholder}
+      />
+
+      {/* Character Count */}
+      <div className="px-4 py-2 bg-[#1c1c1c] border-t border-white/20 text-right">
+        <span className="text-xs text-[#d3d3d3]">{value.replace(/<[^>]*>/g, "").length} caracteres</span>
       </div>
     </div>
   )

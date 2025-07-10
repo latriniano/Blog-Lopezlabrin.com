@@ -1,114 +1,208 @@
 "use client"
 
-import type React from "react"
 import { useState } from "react"
-import { Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
+import { Search, X, Filter, Calendar } from "lucide-react"
+import Link from "next/link"
 
-/**
- * Search UI Component
- * Simple, non-intrusive search functionality
- * Can be toggled open/closed and includes search results
- */
 interface SearchResult {
-  id: string
+  id: number
   title: string
   excerpt: string
-  slug: string
+  category: string
+  date: string
+  readTime: string
+  url: string
 }
 
-interface SearchUIProps {
-  onSearch: (query: string) => void
-  placeholder?: string
-}
+const mockResults: SearchResult[] = [
+  {
+    id: 1,
+    title: "La Reforma Judicial y sus Implicaciones Constitucionales",
+    excerpt: "Un análisis profundo sobre los cambios propuestos en el sistema judicial argentino...",
+    category: "Derecho",
+    date: "15 de enero, 2025",
+    readTime: "12 min",
+    url: "/articulos/1",
+  },
+  {
+    id: 2,
+    title: "Democracia y Participación Ciudadana en el Siglo XXI",
+    excerpt: "Un examen de los nuevos mecanismos de participación política...",
+    category: "Política",
+    date: "8 de enero, 2025",
+    readTime: "10 min",
+    url: "/articulos/4",
+  },
+]
 
-export default function SearchUI({ onSearch, placeholder = "Buscar artículos..." }: SearchUIProps) {
+export function SearchUI() {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState("")
 
   const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery.trim()) return
+    if (!searchQuery.trim()) {
+      setResults([])
+      return
+    }
 
     setIsLoading(true)
-    try {
-      const searchResults = await onSearch(searchQuery)
-      setResults(searchResults)
-    } catch (error) {
-      console.error("Search error:", error)
-    } finally {
+    // Simulate API call
+    setTimeout(() => {
+      const filteredResults = mockResults.filter(
+        (result) =>
+          result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          result.excerpt.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+      setResults(filteredResults)
       setIsLoading(false)
+    }, 500)
+  }
+
+  const getCategoryColor = (category: string) => {
+    switch (category.toLowerCase()) {
+      case "derecho":
+        return "text-[#dc143c] bg-[#dc143c]/10 border-[#dc143c]/30"
+      case "política":
+        return "text-[#1e90ff] bg-[#1e90ff]/10 border-[#1e90ff]/30"
+      case "economía":
+        return "text-[#6a1b9a] bg-[#6a1b9a]/10 border-[#6a1b9a]/30"
+      default:
+        return "text-[#d3d3d3] bg-[#2a2a2a] border-white/20"
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    handleSearch(query)
-  }
-
   return (
-    <div className="relative">
-      {/* Search Toggle Button */}
-      <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)} className="p-2">
-        <Search className="h-5 w-5" />
-        <span className="sr-only">Search</span>
-      </Button>
+    <>
+      {/* Search Trigger */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="flex items-center space-x-2 px-4 py-2 bg-[#2a2a2a] text-[#d3d3d3] rounded-lg hover:bg-[#3a3a3a] transition-colors"
+      >
+        <Search className="w-4 h-4" />
+        <span className="hidden sm:inline">Buscar artículos...</span>
+      </button>
 
-      {/* Search Overlay */}
+      {/* Search Modal */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
-          <Card className="w-full max-w-2xl mx-4">
-            <CardContent className="p-6">
-              {/* Search Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Search Articles</h2>
-                <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} className="p-2">
-                  <Search className="h-5 w-5" />
-                </Button>
-              </div>
-
-              {/* Search Form */}
-              <form onSubmit={handleSubmit} className="relative max-w-md mx-auto mb-6">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#d3d3d3] w-5 h-5" />
-                  <Input
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
+          <div className="bg-[#1c1c1c] border border-white/10 rounded-2xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
+            {/* Search Header */}
+            <div className="p-6 border-b border-white/10">
+              <div className="flex items-center space-x-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#d3d3d3]" />
+                  <input
                     type="text"
-                    placeholder={placeholder}
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-[#eaeaea] placeholder-[#d3d3d3] focus:outline-none focus:border-[#8a2be2] focus:ring-1 focus:ring-[#8a2be2] transition-colors"
+                    onChange={(e) => {
+                      setQuery(e.target.value)
+                      handleSearch(e.target.value)
+                    }}
+                    placeholder="Buscar por título, contenido o tema..."
+                    className="w-full pl-12 pr-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors"
                     autoFocus
                   />
                 </div>
-              </form>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 text-[#d3d3d3] hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-              {/* Search Results */}
-              {results.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="font-medium text-gray-900">Results</h3>
+              {/* Filters */}
+              <div className="flex items-center space-x-4 mt-4">
+                <div className="flex items-center space-x-2">
+                  <Filter className="w-4 h-4 text-[#d3d3d3]" />
+                  <span className="text-sm text-[#d3d3d3]">Filtros:</span>
+                </div>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-3 py-1 bg-[#2a2a2a] border border-white/20 rounded text-white text-sm focus:outline-none focus:border-[#dc143c]"
+                >
+                  <option value="">Todas las categorías</option>
+                  <option value="derecho">Derecho</option>
+                  <option value="politica">Política</option>
+                  <option value="economia">Economía</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Search Results */}
+            <div className="max-h-96 overflow-y-auto">
+              {isLoading ? (
+                <div className="p-8 text-center">
+                  <div className="animate-spin w-8 h-8 border-2 border-[#dc143c] border-t-transparent rounded-full mx-auto mb-4"></div>
+                  <p className="text-[#d3d3d3]">Buscando...</p>
+                </div>
+              ) : results.length > 0 ? (
+                <div className="p-4 space-y-4">
                   {results.map((result) => (
-                    <div key={result.id} className="border-b border-gray-200 pb-4 last:border-b-0">
-                      <h4 className="font-medium text-gray-900 mb-2">
-                        <a
-                          href={`/articles/${result.slug}`}
-                          className="hover:text-blue-700 transition-colors"
-                          onClick={() => setIsOpen(false)}
+                    <Link
+                      key={result.id}
+                      href={result.url}
+                      onClick={() => setIsOpen(false)}
+                      className="block p-4 bg-[#2a2a2a] rounded-lg hover:bg-[#3a3a3a] transition-colors"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-white font-semibold text-lg leading-tight pr-4">{result.title}</h3>
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium border ${getCategoryColor(result.category)}`}
                         >
-                          {result.title}
-                        </a>
-                      </h4>
-                      <p className="text-sm text-gray-600">{result.excerpt}</p>
-                    </div>
+                          {result.category}
+                        </span>
+                      </div>
+                      <p className="text-[#d3d3d3] text-sm mb-3 leading-relaxed">{result.excerpt}</p>
+                      <div className="flex items-center space-x-4 text-xs text-[#d3d3d3]">
+                        <span className="flex items-center space-x-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{result.date}</span>
+                        </span>
+                        <span>{result.readTime} de lectura</span>
+                      </div>
+                    </Link>
                   ))}
                 </div>
+              ) : query ? (
+                <div className="p-8 text-center">
+                  <p className="text-[#d3d3d3] mb-4">No se encontraron resultados para "{query}"</p>
+                  <p className="text-sm text-[#d3d3d3]">Intenta con otros términos o explora nuestras categorías</p>
+                </div>
+              ) : (
+                <div className="p-8 text-center">
+                  <Search className="w-12 h-12 text-[#d3d3d3] mx-auto mb-4" />
+                  <p className="text-[#d3d3d3] mb-2">Busca en nuestro archivo de artículos</p>
+                  <p className="text-sm text-[#d3d3d3]">Encuentra análisis sobre derecho, política y economía</p>
+                </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* Quick Links */}
+            <div className="p-4 border-t border-white/10 bg-[#0a0a0a]">
+              <p className="text-sm text-[#d3d3d3] mb-3">Búsquedas populares:</p>
+              <div className="flex flex-wrap gap-2">
+                {["reforma judicial", "democracia", "economía política", "derechos humanos"].map((term) => (
+                  <button
+                    key={term}
+                    onClick={() => {
+                      setQuery(term)
+                      handleSearch(term)
+                    }}
+                    className="px-3 py-1 bg-[#2a2a2a] text-[#d3d3d3] rounded-full text-sm hover:bg-[#3a3a3a] transition-colors"
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </>
   )
 }

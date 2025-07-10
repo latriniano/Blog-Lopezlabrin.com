@@ -1,182 +1,230 @@
-import SiteHeader from "@/components/site-header"
-import SiteFooter from "@/components/site-footer"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, MapPin, Phone } from "lucide-react"
-import Image from "next/image"
+import { Mail, MapPin, Clock, Send } from "lucide-react"
 
-/**
- * Contact Page (/contacto)
- * Includes contact form and information
- */
 export default function ContactoPage() {
   return (
-    <div className="min-h-screen bg-brand-gray-50">
-      <SiteHeader />
+    <div className="min-h-screen bg-[#121212] text-white">
+      {/* Header */}
+      <section className="py-20 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 post-title-glow">Contacto</h1>
+          <p className="text-xl text-[#d3d3d3] max-w-3xl mx-auto leading-relaxed">
+            ¿Tienes alguna consulta jurídica, propuesta de colaboración o simplemente quieres intercambiar ideas? Estoy
+            aquí para escucharte.
+          </p>
+        </div>
+      </section>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-5xl mx-auto">
-          {/* Page Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-black text-black mb-4 uppercase">Contacto</h1>
-            <div className="w-24 h-2 bg-brand-orange mx-auto"></div>
-            <p className="text-lg text-brand-gray-800 mt-4 max-w-2xl mx-auto">
-              ¿Tienes alguna pregunta, sugerencia o propuesta de colaboración? No dudes en ponerte en contacto.
-            </p>
-          </div>
-
-          {/* LEYES al pedo. Wordmark Logo */}
-          <div className="flex justify-center mb-12">
-            <div className="relative h-12 w-64 md:h-16 md:w-80">
-              <Image
-                src="/images/leyes-al-pedo-wordmark.png"
-                alt="LEYES al pedo."
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <Card className="border-4 border-black bg-white shadow-brand">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-black text-black uppercase">Envíanos un mensaje</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label htmlFor="name" className="block text-sm font-bold text-black">
-                          Nombre
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-brand-orange focus:border-brand-orange bg-white transition-all duration-200 shadow-brand-sm font-medium"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="block text-sm font-bold text-black">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-brand-orange focus:border-brand-orange bg-white transition-all duration-200 shadow-brand-sm font-medium"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="subject" className="block text-sm font-bold text-black">
-                        Asunto
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-brand-orange focus:border-brand-orange bg-white transition-all duration-200 shadow-brand-sm font-medium"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="message" className="block text-sm font-bold text-black">
-                        Mensaje
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={6}
-                        className="w-full px-4 py-3 border-2 border-black focus:outline-none focus:ring-4 focus:ring-brand-orange focus:border-brand-orange bg-white transition-all duration-200 shadow-brand-sm font-medium"
-                        required
-                      ></textarea>
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full bg-brand-orange text-white py-3 px-6 hover:bg-black focus:bg-black transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-offset-2 shadow-brand-sm transform hover:scale-105 focus:scale-105 font-black text-lg border-2 border-black uppercase"
-                    >
-                      Enviar Mensaje
-                    </button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Contact Information */}
+      <div className="max-w-6xl mx-auto px-4 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Contact Information */}
+          <div className="space-y-8">
             <div>
-              <Card className="border-4 border-black bg-white shadow-brand">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-black text-black uppercase">Información de Contacto</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="flex items-start">
-                    <div className="bg-brand-orange text-white p-3 border-2 border-black shadow-brand-sm">
-                      <Mail className="h-5 w-5" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-sm font-bold text-brand-gray-500 uppercase">Email</h3>
-                      <a
-                        href="mailto:contacto@leyesalpedo.com"
-                        className="text-black hover:text-brand-orange focus:text-brand-orange transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 font-bold"
-                      >
-                        contacto@leyesalpedo.com
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="bg-brand-orange text-white p-3 border-2 border-black shadow-brand-sm">
-                      <Phone className="h-5 w-5" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-sm font-bold text-brand-gray-500 uppercase">Teléfono</h3>
-                      <a
-                        href="tel:+541112345678"
-                        className="text-black hover:text-brand-orange focus:text-brand-orange transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 font-bold"
-                      >
-                        +54 11 1234-5678
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="bg-brand-orange text-white p-3 border-2 border-black shadow-brand-sm">
-                      <MapPin className="h-5 w-5" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-sm font-bold text-brand-gray-500 uppercase">Ubicación</h3>
-                      <p className="text-black font-bold">Buenos Aires, Argentina</p>
-                    </div>
-                  </div>
+              <h2 className="text-3xl font-bold text-white mb-6">Información de Contacto</h2>
+              <p className="text-[#d3d3d3] leading-relaxed mb-8">
+                Estoy disponible para consultas profesionales, colaboraciones académicas y proyectos de análisis
+                jurídico. No dudes en contactarme a través de cualquiera de estos medios.
+              </p>
+            </div>
 
-                  <div className="mt-8 pt-8 border-t-2 border-brand-gray-200">
-                    <h3 className="text-lg font-black text-black mb-4 uppercase">Horario de Atención</h3>
-                    <ul className="space-y-2">
-                      <li className="flex justify-between">
-                        <span className="font-bold">Lunes - Viernes:</span>
-                        <span>9:00 - 18:00</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="font-bold">Sábado:</span>
-                        <span>10:00 - 14:00</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span className="font-bold">Domingo:</span>
-                        <span>Cerrado</span>
-                      </li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="p-3 bg-[#dc143c]/20 rounded-lg border border-[#dc143c]/30">
+                  <Mail className="w-6 h-6 text-[#dc143c]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-1">Email</h3>
+                  <p className="text-[#d3d3d3]">contacto@lopezlabrin.com</p>
+                  <p className="text-sm text-[#d3d3d3] mt-1">Respuesta en 24-48 horas</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="p-3 bg-[#1e90ff]/20 rounded-lg border border-[#1e90ff]/30">
+                  <MapPin className="w-6 h-6 text-[#1e90ff]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-1">Ubicación</h3>
+                  <p className="text-[#d3d3d3]">Buenos Aires, Argentina</p>
+                  <p className="text-sm text-[#d3d3d3] mt-1">Consultas presenciales disponibles</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="p-3 bg-[#6a1b9a]/20 rounded-lg border border-[#6a1b9a]/30">
+                  <Clock className="w-6 h-6 text-[#6a1b9a]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-1">Horarios de Atención</h3>
+                  <p className="text-[#d3d3d3]">Lunes a Viernes: 9:00 - 18:00</p>
+                  <p className="text-sm text-[#d3d3d3] mt-1">Consultas urgentes: Fines de semana</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Areas of Expertise */}
+            <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
+              <h3 className="text-xl font-semibold text-white mb-4">Áreas de Consulta</h3>
+              <ul className="space-y-2 text-[#d3d3d3]">
+                <li className="flex items-center space-x-2">
+                  <span className="w-2 h-2 bg-[#dc143c] rounded-full"></span>
+                  <span>Derecho Constitucional y Derechos Humanos</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-2 h-2 bg-[#1e90ff] rounded-full"></span>
+                  <span>Análisis Político y Institucional</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-2 h-2 bg-[#6a1b9a] rounded-full"></span>
+                  <span>Economía Política y Políticas Públicas</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-2 h-2 bg-[#dc143c] rounded-full"></span>
+                  <span>Colaboraciones Académicas y Editoriales</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="bg-[#1c1c1c] p-8 rounded-2xl border border-white/10">
+            <h2 className="text-2xl font-bold text-white mb-6">Envía tu Consulta</h2>
+
+            <form className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="nombre" className="block text-sm font-medium text-white mb-2">
+                    Nombre *
+                  </label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    required
+                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors"
+                    placeholder="Tu nombre completo"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors"
+                    placeholder="tu@email.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="asunto" className="block text-sm font-medium text-white mb-2">
+                  Asunto *
+                </label>
+                <input
+                  type="text"
+                  id="asunto"
+                  name="asunto"
+                  required
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors"
+                  placeholder="Breve descripción del tema"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="categoria" className="block text-sm font-medium text-white mb-2">
+                  Categoría de Consulta
+                </label>
+                <select
+                  id="categoria"
+                  name="categoria"
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white focus:outline-none focus:border-[#dc143c] transition-colors"
+                >
+                  <option value="">Selecciona una categoría</option>
+                  <option value="derecho">Consulta Jurídica</option>
+                  <option value="politica">Análisis Político</option>
+                  <option value="economia">Economía Política</option>
+                  <option value="colaboracion">Colaboración</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="mensaje" className="block text-sm font-medium text-white mb-2">
+                  Mensaje *
+                </label>
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  rows={6}
+                  required
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors resize-vertical"
+                  placeholder="Describe tu consulta o propuesta en detalle..."
+                ></textarea>
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="privacidad"
+                  name="privacidad"
+                  required
+                  className="mt-1 w-4 h-4 text-[#dc143c] bg-[#2a2a2a] border-white/20 rounded focus:ring-[#dc143c] focus:ring-2"
+                />
+                <label htmlFor="privacidad" className="text-sm text-[#d3d3d3]">
+                  Acepto la{" "}
+                  <a href="/privacidad" className="text-[#dc143c] hover:underline">
+                    política de privacidad
+                  </a>{" "}
+                  y el tratamiento de mis datos personales. *
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-[#dc143c] to-[#8b0000] text-white font-semibold py-4 px-6 rounded-lg hover:from-[#b91c3c] hover:to-[#7f1d1d] transition-all duration-300 flex items-center justify-center space-x-2"
+              >
+                <Send className="w-5 h-5" />
+                <span>Enviar Consulta</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-[#0a0a0a]">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-white mb-12 text-center">Preguntas Frecuentes</h2>
+
+          <div className="space-y-6">
+            <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
+              <h3 className="text-lg font-semibold text-white mb-3">¿Cuánto tiempo toma recibir una respuesta?</h3>
+              <p className="text-[#d3d3d3]">
+                Generalmente respondo dentro de 24-48 horas. Para consultas urgentes, puedo atender fines de semana.
+              </p>
+            </div>
+
+            <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
+              <h3 className="text-lg font-semibold text-white mb-3">¿Realizas consultas gratuitas?</h3>
+              <p className="text-[#d3d3d3]">
+                Ofrezco una primera consulta orientativa sin costo. Para análisis detallados o asesoramiento continuo,
+                establecemos honorarios según la complejidad del caso.
+              </p>
+            </div>
+
+            <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
+              <h3 className="text-lg font-semibold text-white mb-3">¿Trabajas con medios de comunicación?</h3>
+              <p className="text-[#d3d3d3]">
+                Sí, colaboro regularmente con medios especializados proporcionando análisis jurídico y político.
+                Contacta para propuestas editoriales.
+              </p>
             </div>
           </div>
         </div>
-      </main>
-
-      <SiteFooter />
+      </section>
     </div>
   )
 }

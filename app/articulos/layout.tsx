@@ -1,10 +1,9 @@
-import type React from "react"
-import PageTransition from "@/components/page-transition"
+import type { ReactNode } from "react"
 
-export default function ArticleLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return <PageTransition>{children}</PageTransition>
+interface ArticulosLayoutProps {
+  children: ReactNode
+}
+
+export default function ArticulosLayout({ children }: ArticulosLayoutProps) {
+  return <div className="min-h-screen bg-[#121212]">{children}</div>
 }
