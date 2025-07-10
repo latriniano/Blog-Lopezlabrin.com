@@ -91,7 +91,7 @@ a {
 
 /* Read More Link */
 .read-more-link {
-  color: #ff6b35;
+  color: #DC143C;
   transition: all 0.3s ease;
 }
 
@@ -167,7 +167,7 @@ a {
 .article-content h3 {
   font-size: 1.5rem;
   line-height: 1.4;
-  color: #ff6b35;
+  color: #DC143C;
 }
 
 .article-content p {
@@ -177,7 +177,7 @@ a {
 }
 
 .article-content blockquote {
-  border-left: 4px solid #ff6b35;
+  border-left: 4px solid #DC143C;
   background: rgba(255, 107, 53, 0.1);
   padding: 1.5rem;
   margin: 2rem 0;
@@ -212,7 +212,7 @@ a {
 }
 
 .article-content a {
-  color: #ff6b35;
+  color: #DC143C;
   text-decoration: underline;
   transition: color 0.2s ease;
 }
@@ -226,7 +226,7 @@ a {
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-family: "Courier New", monospace;
-  color: #ff6b35;
+  color: #DC143C;
 }
 
 .article-content pre {
@@ -250,7 +250,7 @@ a {
 
 .article-content em {
   font-style: italic;
-  color: #ff6b35;
+  color: #DC143C;
 }
 
 /* Responsive Design */
@@ -297,7 +297,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ff6b35;
+  background: #DC143C;
   border-radius: 4px;
 }
 

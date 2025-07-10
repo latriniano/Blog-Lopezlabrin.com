@@ -2,12 +2,11 @@ import type { Config } from "tailwindcss"
 
 const config: Config = {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "*.{js,ts,jsx,tsx,mdx}",
-  ],
+content: [
+  "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+  "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  "./app/**/*.{js,ts,jsx,tsx,mdx}",
+],
   prefix: "",
   theme: {
     container: {
@@ -53,7 +52,7 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
         brand: {
-          orange: "#ff6b35",
+          orange: "#DC143C",
           red: "#dc143c",
           blue: "#1e90ff",
           dark: "#121212",
@@ -104,7 +103,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],}
 
 export default config

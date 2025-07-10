@@ -1,29 +1,49 @@
-import { ArticleLayout } from "@/components/article-layout"
-import { articlesData } from "@/lib/articles-data"
-import { notFound } from "next/navigation"
+// app/articulos/[slug]/page.tsx
+import { getPublishedBlogPosts, getSinglePostBySlug, getPostContent } from "@/lib/notion";
+import { notFound } from "next/navigation";
+import NotionRenderer from "@/components/NotionRenderer";
 
-interface ArticlePageProps {
-  params: {
-    slug: string
-  }
+export async function generateStaticParams() {
+  const posts = await getPublishedBlogPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
-export default function ArticuloPage({ params }: ArticlePageProps) {
-  const article = articlesData.find((a) => a.slug === params.slug)
+export default async function ArticlePage({ params }: { params: { slug:string }}) {
+  const post = await getSinglePostBySlug(params.slug);
+  if (!post) notFound();
 
-  if (!article) {
-    notFound()
-  }
+// --- INICIO DEPURACIÓN FINAL ---
+console.log("==============================================");
+console.log("PÁGINA ENCONTRADA POR SLUG:", params.slug);
+console.log("Título de la página:", post.title);
+console.log("ID DE LA PÁGINA QUE VAMOS A BUSCAR:", post.id); // <-- ¡La línea más importante!
+console.log("==============================================");
+
+ const content = await getPostContent(post.id);
+
+console.log("ESTRUCTURA DE DATOS RECIBIDA PARA ESE ID:", JSON.stringify(content, null, 2));
+console.log("==============================================");
+// --- FIN DEPURACIÓN FINAL ---
 
   return (
-    <ArticleLayout title={article.title} date={article.date} category={article.category} readTime={article.readTime}>
-      <div dangerouslySetInnerHTML={{ __html: article.content }} />
-    </ArticleLayout>
-  )
-}
+    <div className="min-h-screen bg-[#121212] text-white">
 
-export function generateStaticParams() {
-  return articlesData.map((article) => ({
-    slug: article.slug,
-  }))
+      <main className="pt-24">
+        <article className="max-w-4xl mx-auto px-4 py-8">
+          <header className="mb-12 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white title-glow">
+              {post.title}
+            </h1>
+            <p className="text-lg text-gray-400 mt-4">
+              Publicado el: {new Date(post.publishDate).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+          </header>
+          <div className="prose prose-invert prose-lg max-w-none mx-auto">
+            <NotionRenderer blocks={content} />
+          </div>
+        </article>
+      </main>
+
+    </div>
+  );
 }
