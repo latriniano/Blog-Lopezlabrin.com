@@ -18,7 +18,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   if (!post) {
     notFound();
   }
-
+  
   // ESTA ES LA LÍNEA QUE PROBABLEMENTE FALTABA
   const content = await getPostContent(post.id);
 
