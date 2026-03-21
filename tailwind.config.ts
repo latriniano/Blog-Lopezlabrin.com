@@ -52,10 +52,10 @@ content: [
           foreground: "hsl(var(--card-foreground))",
         },
         brand: {
-          orange: "#DC143C",
-          red: "#dc143c",
-          blue: "#1e90ff",
-          dark: "#121212",
+          orange: "#f9b000",
+          red: "#e84133",
+          blue: "#f9b000",
+          dark: "#262626",
           gray: {
             50: "#f9fafb",
             100: "#f3f4f6",

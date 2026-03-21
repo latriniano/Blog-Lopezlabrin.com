@@ -1,187 +1,238 @@
-import { MapPin, Mail, Award, BookOpen, Users, Briefcase } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { Award, BookOpen, Briefcase, Mail, MapPin, Users } from "lucide-react"
+
+type OngoingProject = {
+  name: string
+  stage: string
+  timeline: string
+  summary: string
+  focusAreas: string[]
+}
+
+// Data de ejemplo: reemplazá o editá estos objetos para actualizar la sección.
+const ongoingProjects: OngoingProject[] = [
+  {
+    name: "Observatorio de Reformas Institucionales",
+    stage: "En investigación",
+    timeline: "Publicación inicial: Q2 2026",
+    summary:
+      "Plataforma de análisis comparado sobre reformas institucionales en América Latina, con foco en impacto constitucional y calidad democrática.",
+    focusAreas: ["Derecho público", "Diseño institucional", "Análisis comparado"],
+  },
+  {
+    name: "Serie audiovisual: Poder y Constitución",
+    stage: "En producción",
+    timeline: "Lanzamiento piloto: Junio 2026",
+    summary:
+      "Formato breve para explicar conflictos constitucionales actuales, decisiones judiciales clave y debates de gobernanza con lenguaje claro.",
+    focusAreas: ["Divulgación", "Análisis político", "Educación cívica"],
+  },
+  {
+    name: "Laboratorio de indicadores de calidad regulatoria",
+    stage: "En desarrollo",
+    timeline: "Beta privada: Agosto 2026",
+    summary:
+      "Proyecto aplicado para medir claridad normativa, estabilidad regulatoria y costos institucionales en políticas públicas estratégicas.",
+    focusAreas: ["Regulación", "Datos públicos", "Políticas públicas"],
+  },
+]
 
 export default function AcercaDePage() {
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 post-title-glow">
-                López Labrin
-                <span className="block text-[#dc143c]">Lautaro</span>
-              </h1>
-              <p className="text-xl text-[#d3d3d3] mb-8 leading-relaxed">
-                Abogado especializado en derecho constitucional, análisis político y económico. Comprometido con el
-                análisis crítico y la divulgación jurídica.
-              </p>
-              <div className="flex items-center space-x-6 text-[#d3d3d3]">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-5 h-5" />
-                  <span>Buenos Aires, Argentina</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="w-5 h-5" />
-                  <span>contacto@lopezlabrin.com</span>
-                </div>
-              </div>
+    <div className="min-h-screen bg-background pt-[112px] pb-20">
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pb-16 border-b border-border">
+        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-12 lg:gap-20 items-center">
+          <div className="relative">
+            <div className="relative aspect-[3/4] overflow-hidden bg-foreground">
+              <Image
+                src="/images/lopez-labrin-profile.png"
+                alt="Lautaro López Labrin"
+                fill
+                className="object-cover grayscale"
+                sizes="(max-width: 1024px) 100vw, 340px"
+                priority
+              />
             </div>
-            <div className="flex justify-center">
-              <div className="relative">
-                <div className="w-80 h-80 rounded-full bg-gradient-to-br from-[#dc143c] to-[#8b0000] p-1">
-                  <Image
-                    src="/images/lopez-labrin-profile.png"
-                    alt="López Labrin Lautaro"
-                    width={320}
-                    height={320}
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                </div>
+            <div className="absolute top-3 left-3 w-full h-full border border-[var(--color-beige)]/40 -z-10" aria-hidden="true" />
+          </div>
+
+          <div>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-2 h-2 bg-[var(--color-red)]" />
+              <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Perfil profesional</p>
+            </div>
+
+            <h1 className="font-serif text-[clamp(2.3rem,5vw,4.6rem)] leading-[1.05] tracking-[-0.02em] text-foreground text-balance mb-7">
+              Lautaro López Labrin
+            </h1>
+
+            <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mb-8">
+              Estudiante de derecho y analista con interés en derecho público, instituciones democráticas y coyuntura política. Tengo un canal de Youtube en el que explico los temas que en este blog trabajo.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <MapPin size={16} />
+                Villa Carlos Paz, Córdoba, Argentina
               </div>
+              <a href="mailto:contacto@lopezlabrin.com" className="flex items-center gap-2 hover:text-[var(--color-blue)] transition-colors">
+                <Mail size={16} />
+                contacto@lopezlabrin.com
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CV Section */}
-      <section className="py-20 bg-[#0a0a0a]">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-white mb-16 text-center post-title-glow">Curriculum Vitae</h2>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Education */}
-            <div className="space-y-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <BookOpen className="w-6 h-6 text-[#dc143c]" />
-                <h3 className="text-2xl font-bold text-white">Formación Académica</h3>
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-16 md:py-20">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+          <article className="border border-border bg-card p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-6">
+              <BookOpen className="text-[var(--color-blue)]" />
+              <h2 className="font-serif text-3xl text-foreground">Formación Académica</h2>
+            </div>
+            <div className="space-y-6">
+              <div className="border-l-2 border-[var(--color-blue)] pl-5">
+                <h3 className="font-serif text-xl text-foreground">Abogado</h3>
+                <p className="font-sans text-sm text-[var(--color-blue)]">Universidad de Buenos Aires - Facultad de Derecho</p>
+                <p className="font-sans text-sm text-muted-foreground mt-1">2018 - 2023</p>
+                <p className="font-sans text-sm text-muted-foreground mt-3 leading-relaxed">
+                  Especialización en derecho constitucional y derechos humanos, con foco en análisis institucional.
+                </p>
               </div>
 
-              <div className="space-y-6">
-                <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
-                  <h4 className="text-xl font-semibold text-white mb-2">Abogado</h4>
-                  <p className="text-[#dc143c] mb-2">Universidad de Buenos Aires - Facultad de Derecho</p>
-                  <p className="text-[#d3d3d3] text-sm">2018 - 2023</p>
-                  <p className="text-[#d3d3d3] mt-3">
-                    Especialización en Derecho Constitucional y Derechos Humanos. Tesis sobre "Nuevos Paradigmas del
-                    Constitucionalismo Contemporáneo".
-                  </p>
-                </div>
-
-                <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
-                  <h4 className="text-xl font-semibold text-white mb-2">Especialización en Derecho Público</h4>
-                  <p className="text-[#dc143c] mb-2">Universidad Austral</p>
-                  <p className="text-[#d3d3d3] text-sm">2024 - En curso</p>
-                  <p className="text-[#d3d3d3] mt-3">
-                    Profundización en derecho administrativo, constitucional y análisis de políticas públicas.
-                  </p>
-                </div>
+              <div className="border-l-2 border-[var(--color-blue)] pl-5">
+                <h3 className="font-serif text-xl text-foreground">Especialización en Derecho Público</h3>
+                <p className="font-sans text-sm text-[var(--color-blue)]">Universidad Austral</p>
+                <p className="font-sans text-sm text-muted-foreground mt-1">2024 - Actualidad</p>
+                <p className="font-sans text-sm text-muted-foreground mt-3 leading-relaxed">
+                  Profundización en derecho administrativo, diseño regulatorio y políticas públicas.
+                </p>
               </div>
             </div>
+          </article>
 
-            {/* Experience */}
-            <div className="space-y-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <Briefcase className="w-6 h-6 text-[#dc143c]" />
-                <h3 className="text-2xl font-bold text-white">Experiencia Profesional</h3>
+          <article className="border border-border bg-card p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-6">
+              <Briefcase className="text-[var(--color-red)]" />
+              <h2 className="font-serif text-3xl text-foreground">Experiencia</h2>
+            </div>
+            <div className="space-y-6">
+              <div className="border-l-2 border-[var(--color-red)] pl-5">
+                <h3 className="font-serif text-xl text-foreground">Analista Jurídico</h3>
+                <p className="font-sans text-sm text-[var(--color-red)]">Práctica privada y consultoría</p>
+                <p className="font-sans text-sm text-muted-foreground mt-1">2023 - Actualidad</p>
+                <p className="font-sans text-sm text-muted-foreground mt-3 leading-relaxed">
+                  Análisis normativo, elaboración de informes y asesoramiento en conflictos de derecho público.
+                </p>
               </div>
 
-              <div className="space-y-6">
-                <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
-                  <h4 className="text-xl font-semibold text-white mb-2">Analista Jurídico</h4>
-                  <p className="text-[#dc143c] mb-2">Estudio Jurídico Asociado</p>
-                  <p className="text-[#d3d3d3] text-sm">2023 - Presente</p>
-                  <p className="text-[#d3d3d3] mt-3">
-                    Análisis de normativa constitucional, asesoramiento en derecho público y elaboración de informes
-                    jurídicos especializados.
-                  </p>
-                </div>
-
-                <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10">
-                  <h4 className="text-xl font-semibold text-white mb-2">Columnista y Analista</h4>
-                  <p className="text-[#dc143c] mb-2">Medios Especializados</p>
-                  <p className="text-[#d3d3d3] text-sm">2022 - Presente</p>
-                  <p className="text-[#d3d3d3] mt-3">
-                    Análisis político-jurídico en medios digitales y tradicionales. Especialización en temas
-                    constitucionales y económicos.
-                  </p>
-                </div>
+              <div className="border-l-2 border-[var(--color-red)] pl-5">
+                <h3 className="font-serif text-xl text-foreground">Columnista y Analista</h3>
+                <p className="font-sans text-sm text-[var(--color-red)]">Medios especializados</p>
+                <p className="font-sans text-sm text-muted-foreground mt-1">2022 - Actualidad</p>
+                <p className="font-sans text-sm text-muted-foreground mt-3 leading-relaxed">
+                  Cobertura de temas jurídicos y políticos con enfoque en institucionalidad democrática.
+                </p>
               </div>
             </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
+        <div className="border border-border bg-card p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <Award className="text-[var(--color-blue)]" />
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground">Reconocimientos</h2>
+            </div>
+            <ul className="space-y-3 font-sans text-sm text-muted-foreground leading-relaxed">
+              <li>Premio al mejor ensayo jurídico - UBA (2023)</li>
+              <li>Mención en investigaciones de derecho constitucional</li>
+              <li>Participación en congresos académicos sobre derecho público</li>
+            </ul>
           </div>
 
-          {/* Skills & Achievements */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <Award className="w-6 h-6 text-[#dc143c]" />
-                <h3 className="text-2xl font-bold text-white">Reconocimientos</h3>
-              </div>
-              <ul className="space-y-3 text-[#d3d3d3]">
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Premio al Mejor Ensayo Jurídico - UBA (2023)</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Mención Honorífica en Derecho Constitucional</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Participación en Congresos Internacionales de Derecho</span>
-                </li>
-              </ul>
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <Users className="text-[var(--color-red)]" />
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground">Áreas de Especialización</h2>
             </div>
-
-            <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <Users className="w-6 h-6 text-[#dc143c]" />
-                <h3 className="text-2xl font-bold text-white">Áreas de Especialización</h3>
-              </div>
-              <ul className="space-y-3 text-[#d3d3d3]">
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Derecho Constitucional y Derechos Humanos</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Análisis Político y Económico</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Derecho Público y Administrativo</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="w-2 h-2 bg-[#dc143c] rounded-full mt-2 flex-shrink-0"></span>
-                  <span>Políticas Públicas y Gobernanza</span>
-                </li>
-              </ul>
-            </div>
+            <ul className="space-y-3 font-sans text-sm text-muted-foreground leading-relaxed">
+              <li>Derecho constitucional y derechos humanos</li>
+              <li>Análisis político e institucional</li>
+              <li>Economía política y regulación pública</li>
+              <li>Investigación y divulgación jurídica</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Contact CTA */}
-      <section className="py-16 bg-gradient-to-r from-[#dc143c] to-[#8b0000]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">¿Interesado en colaborar?</h2>
-          <p className="text-xl text-white/90 mb-8">
-            Estoy disponible para consultas jurídicas, análisis especializados y colaboraciones académicas.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pt-16 md:pt-20">
+        <div className="flex items-center gap-4 mb-8 md:mb-10">
+          <div className="w-2 h-2 bg-[var(--color-blue)]" />
+          <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Otros proyectos</p>
+        </div>
+
+        <h2 className="font-serif text-[clamp(2rem,3.2vw,3.1rem)] leading-[1.1] tracking-[-0.02em] text-foreground max-w-3xl mb-8 md:mb-10">
+          Proyectos en los que estoy trabajando actualmente
+        </h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+          {ongoingProjects.map((project) => (
+            <article
+              key={project.name}
+              className="border border-border bg-card p-7 md:p-8 flex flex-col gap-5 hover:border-[var(--color-blue)]/40 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <h3 className="font-serif text-2xl leading-tight text-foreground">{project.name}</h3>
+                <span className="shrink-0 font-sans text-[10px] tracking-[0.18em] uppercase text-[var(--color-blue)] border border-[var(--color-blue)]/35 px-3 py-1">
+                  {project.stage}
+                </span>
+              </div>
+
+              <p className="font-sans text-[11px] tracking-[0.16em] uppercase text-muted-foreground">{project.timeline}</p>
+
+              <p className="font-sans text-sm text-muted-foreground leading-relaxed">{project.summary}</p>
+
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-border">
+                {project.focusAreas.map((focus) => (
+                  <span
+                    key={`${project.name}-${focus}`}
+                    className="font-sans text-[10px] tracking-[0.14em] uppercase text-muted-foreground border border-border px-2.5 py-1"
+                  >
+                    {focus}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pt-16">
+        <div className="border border-border bg-card p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-2">¿Interesado en colaborar?</h2>
+            <p className="font-sans text-sm md:text-base text-muted-foreground">
+              Disponible para consultas jurídicas, análisis especializados y colaboraciones editoriales.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
             <a
               href="mailto:contacto@lopezlabrin.com"
-              className="px-8 py-3 bg-white text-[#dc143c] rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center justify-center bg-foreground text-background px-6 py-3 font-sans text-[11px] tracking-[0.18em] uppercase hover:bg-[var(--color-blue)] transition-colors"
             >
-              Contactar por Email
+              Contactar por email
             </a>
-            <a
+            <Link
               href="/contacto"
-              className="px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[#dc143c] transition-colors"
+              className="inline-flex items-center justify-center border border-border px-6 py-3 font-sans text-[11px] tracking-[0.18em] uppercase hover:border-[var(--color-blue)] hover:text-[var(--color-blue)] transition-colors"
             >
-              Formulario de Contacto
-            </a>
+              Ir a contacto
+            </Link>
           </div>
         </div>
       </section>

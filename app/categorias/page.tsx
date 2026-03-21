@@ -1,165 +1,152 @@
 import Link from "next/link"
-import { Scale, Users, TrendingUp, ChevronRight } from "lucide-react"
+import { ChevronRight, Globe, Scale, TrendingUp, Users } from "lucide-react"
+import { getPublishedBlogPosts } from "@/lib/notion"
+import { slugify } from "@/lib/utils"
 
-const categories = [
-  {
-    name: "Derecho",
-    slug: "derecho",
-    description: "Análisis jurídico, constitucional y de derechos humanos",
-    icon: Scale,
-    color: "from-[#dc143c] to-[#8b0000]",
-    borderColor: "border-[#dc143c]/30",
-    bgColor: "bg-[#dc143c]/10",
-    textColor: "text-[#dc143c]",
-    count: 12,
-  },
-  {
-    name: "Política",
-    slug: "politica",
-    description: "Análisis político, democracia y participación ciudadana",
-    icon: Users,
-    color: "from-[#1e90ff] to-[#0066cc]",
-    borderColor: "border-[#1e90ff]/30",
-    bgColor: "bg-[#1e90ff]/10",
-    textColor: "text-[#1e90ff]",
-    count: 8,
-  },
-  {
-    name: "Economía",
-    slug: "economia",
-    description: "Economía política, políticas fiscales y análisis económico",
-    icon: TrendingUp,
-    color: "from-[#6a1b9a] to-[#4a148c]",
-    borderColor: "border-[#6a1b9a]/30",
-    bgColor: "bg-[#6a1b9a]/10",
-    textColor: "text-[#6a1b9a]",
-    count: 6,
-  },
-]
+interface CategoryCard {
+  name: string
+  slug: string
+  count: number
+  description: string
+  color: string
+  icon: typeof Scale
+}
 
-export default function CategoriasPage() {
+function getCategoryMeta(categoryName: string) {
+  const slug = slugify(categoryName)
+
+  if (slug.includes("derecho") || slug.includes("jurid")) {
+    return {
+      description: "Análisis jurídico, constitucional y de derechos humanos.",
+      color: "var(--color-red)",
+      icon: Scale,
+    }
+  }
+
+  if (slug.includes("politica") || slug.includes("democracia") || slug.includes("institucion")) {
+    return {
+      description: "Debate institucional, democracia y coyuntura política.",
+      color: "var(--color-blue)",
+      icon: Users,
+    }
+  }
+
+  if (slug.includes("econom") || slug.includes("fiscal") || slug.includes("mercado")) {
+    return {
+      description: "Economía política, regulación y dinámica de mercados.",
+      color: "var(--color-red)",
+      icon: TrendingUp,
+    }
+  }
+
+  if (slug.includes("geopolit") || slug.includes("internacional") || slug.includes("global")) {
+    return {
+      description: "Escenarios globales, relaciones internacionales y poder regional.",
+      color: "var(--color-blue)",
+      icon: Globe,
+    }
+  }
+
+  return {
+    description: "Análisis y ensayos sobre actualidad institucional.",
+    color: "var(--color-blue)",
+    icon: Globe,
+  }
+}
+
+export default async function CategoriasPage() {
+  const posts = await getPublishedBlogPosts()
+
+  const categoriesMap = new Map<string, { name: string; count: number }>()
+
+  for (const post of posts) {
+    const categoryName = post.category || "General"
+    const categorySlug = slugify(categoryName)
+    const existing = categoriesMap.get(categorySlug)
+
+    if (existing) {
+      existing.count += 1
+    } else {
+      categoriesMap.set(categorySlug, { name: categoryName, count: 1 })
+    }
+  }
+
+  const categories: CategoryCard[] = Array.from(categoriesMap.entries())
+    .map(([slug, item]) => {
+      const name = item.name
+      const count = item.count
+      const meta = getCategoryMeta(name)
+
+      return {
+        name,
+        slug,
+        count,
+        description: meta.description,
+        color: meta.color,
+        icon: meta.icon,
+      }
+    })
+    .sort((a, b) => b.count - a.count)
+
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
-      {/* Header */}
-      <section className="py-20 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 post-title-glow">Categorías</h1>
-          <p className="text-xl text-[#d3d3d3] max-w-3xl mx-auto leading-relaxed">
-            Explora nuestros análisis organizados por áreas temáticas. Cada categoría aborda aspectos fundamentales del
-            derecho, la política y la economía contemporánea.
+    <div className="min-h-screen bg-background pt-[112px] pb-20">
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pb-16 border-b border-border">
+        <div className="max-w-4xl">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-2 h-2 bg-[var(--color-blue)]" />
+            <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Mapa editorial</p>
+          </div>
+
+          <h1 className="font-serif text-[clamp(2.3rem,5vw,4.8rem)] leading-[1.05] tracking-[-0.02em] text-foreground text-balance mb-6">
+            Categorías de análisis
+          </h1>
+
+          <p className="font-sans text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl">
+            Explorá las publicaciones por área temática. Cada categoría agrupa ensayos y análisis sobre los debates
+            más relevantes del derecho, la política y la economía.
           </p>
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-16">
+        {categories.length === 0 ? (
+          <div className="border border-border bg-card p-8 md:p-10">
+            <p className="font-sans text-sm md:text-base text-muted-foreground">No hay categorías disponibles todavía.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {categories.map((category) => {
-              const IconComponent = category.icon
+              const Icon = category.icon
               return (
-                <Link key={category.slug} href={`/categoria/${category.slug}`} className="group block">
-                  <div
-                    className={`h-full p-8 rounded-2xl border ${category.borderColor} ${category.bgColor} hover:scale-105 transition-all duration-300 hover:shadow-2xl`}
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <div className={`p-3 rounded-lg bg-gradient-to-br ${category.color}`}>
-                        <IconComponent className="w-8 h-8 text-white" />
-                      </div>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${category.bgColor} ${category.textColor} border ${category.borderColor}`}
-                      >
-                        {category.count} artículos
-                      </span>
+                <Link
+                  key={category.slug}
+                  href={`/categoria/${category.slug}`}
+                  className="group border border-border bg-card p-7 md:p-8 hover:border-foreground transition-colors"
+                >
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 border border-border" style={{ color: category.color }}>
+                      <Icon className="w-6 h-6" />
                     </div>
+                    <span className="font-sans text-[11px] tracking-[0.15em] uppercase text-muted-foreground">
+                      {category.count} artículos
+                    </span>
+                  </div>
 
-                    <h3
-                      className={`text-2xl font-bold mb-4 ${category.textColor} group-hover:text-white transition-colors`}
-                    >
-                      {category.name}
-                    </h3>
+                  <h2 className="font-serif text-3xl text-foreground mb-3 group-hover:text-[var(--color-blue)] transition-colors">
+                    {category.name}
+                  </h2>
 
-                    <p className="text-[#d3d3d3] mb-6 leading-relaxed">{category.description}</p>
+                  <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-6">{category.description}</p>
 
-                    <div className="flex items-center justify-between">
-                      <span className={`text-sm font-medium ${category.textColor}`}>Ver artículos</span>
-                      <ChevronRight
-                        className={`w-5 h-5 ${category.textColor} group-hover:translate-x-1 transition-transform`}
-                      />
-                    </div>
+                  <div className="inline-flex items-center gap-2 font-sans text-[11px] tracking-[0.18em] uppercase text-foreground group-hover:text-[var(--color-blue)] transition-colors">
+                    Ver categoría
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </Link>
               )
             })}
           </div>
-        </div>
-      </section>
-
-      {/* Featured Articles by Category */}
-      <section className="py-20 bg-[#0a0a0a]">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">Artículos Destacados por Categoría</h2>
-
-          <div className="space-y-12">
-            {categories.map((category) => (
-              <div key={category.slug} className="space-y-6">
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-lg bg-gradient-to-br ${category.color}`}>
-                    <category.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className={`text-xl font-bold ${category.textColor}`}>{category.name}</h3>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
-                    <h4 className="text-lg font-semibold text-white mb-3">
-                      {category.name === "Derecho" && "La Reforma Judicial y sus Implicaciones"}
-                      {category.name === "Política" && "Democracia y Participación Ciudadana"}
-                      {category.name === "Economía" && "Política Fiscal y Desigualdad"}
-                    </h4>
-                    <p className="text-[#d3d3d3] text-sm mb-4">
-                      {category.name === "Derecho" &&
-                        "Análisis constitucional de las reformas propuestas al sistema judicial."}
-                      {category.name === "Política" && "Nuevos mecanismos de participación en la era digital."}
-                      {category.name === "Economía" && "Estrategias redistributivas y su efectividad."}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-[#d3d3d3]">15 min de lectura</span>
-                      <Link
-                        href={`/categoria/${category.slug}`}
-                        className={`text-sm ${category.textColor} hover:underline`}
-                      >
-                        Leer más →
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#1c1c1c] p-6 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
-                    <h4 className="text-lg font-semibold text-white mb-3">
-                      {category.name === "Derecho" && "Constitucionalismo Verde"}
-                      {category.name === "Política" && "Crisis de Representación"}
-                      {category.name === "Economía" && "Geopolítica Económica"}
-                    </h4>
-                    <p className="text-[#d3d3d3] text-sm mb-4">
-                      {category.name === "Derecho" && "Derechos ambientales en las constituciones contemporáneas."}
-                      {category.name === "Política" && "Partidos políticos y nuevos movimientos ciudadanos."}
-                      {category.name === "Economía" && "Bloques comerciales en el siglo XXI."}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-[#d3d3d3]">12 min de lectura</span>
-                      <Link
-                        href={`/categoria/${category.slug}`}
-                        className={`text-sm ${category.textColor} hover:underline`}
-                      >
-                        Leer más →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        )}
       </section>
     </div>
   )

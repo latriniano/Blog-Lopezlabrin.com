@@ -20,13 +20,13 @@ export function ArticleContentDisplay({
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case "derecho":
-        return "bg-[#dc143c]/20 text-[#dc143c] border-[#dc143c]/30"
+        return "bg-[#e84133]/20 text-[#e84133] border-[#e84133]/30"
       case "política":
-        return "bg-[#1e90ff]/20 text-[#1e90ff] border-[#1e90ff]/30"
+        return "bg-[#f9b000]/20 text-[#f9b000] border-[#f9b000]/30"
       case "economía":
-        return "bg-[#6a1b9a]/20 text-[#6a1b9a] border-[#6a1b9a]/30"
+        return "bg-[#f9b000]/20 text-[#f9b000] border-[#f9b000]/30"
       default:
-        return "bg-[#dc143c]/20 text-[#dc143c] border-[#dc143c]/30"
+        return "bg-[#e84133]/20 text-[#e84133] border-[#e84133]/30"
     }
   }
 

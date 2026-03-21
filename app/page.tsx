@@ -1,39 +1,56 @@
-import { getPublishedBlogPosts } from "@/lib/notion";
-import HomePageClient from "./home-page-client"; // Importamos el diseño que acabamos de mover
+import { HeroSection } from "@/components/hero-section"
+import { FeaturedArticle } from "@/components/featured-article"
+import { ArticlesFeed } from "@/components/articles-feed"
+import { AboutSection } from "@/components/about-section"
+import { NewsletterCta } from "@/components/newsletter-cta"
+import { getPublishedBlogPosts } from "@/lib/notion"
 
-// Esta es la interfaz que tu diseño espera. La mantenemos aquí para que todo encaje.
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  category: string;
-  readTime: string;
-  gradientClass: string;
-  imageUrl?: string;
+function formatDate(date?: string) {
+  if (!date) return "Sin fecha"
+
+  return new Date(date).toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })
 }
 
-// Este es nuestro Componente de Servidor. Es 'async' para poder esperar a Notion.
-export default async function Page() {
-  // 1. Obtenemos los datos reales de Notion
-  const notionArticles = await getPublishedBlogPosts();
+export default async function HomePage() {
+  const posts = await getPublishedBlogPosts()
 
-  // 2. Transformamos los datos para que coincidan con la `interface Article` de tu diseño
-  const articles: Article[] = notionArticles.map((post, index) => ({
+  const featuredPost = posts.find((post) => post.featured) ?? posts[0]
+
+  const featuredArticle = featuredPost
+    ? {
+        title: featuredPost.title,
+        slug: featuredPost.slug,
+        summary: featuredPost.summary,
+        category: featuredPost.category,
+        publishDate: formatDate(featuredPost.publishDate),
+        coverImage: featuredPost.coverImage,
+        readTime: featuredPost.readTime,
+        author: featuredPost.author,
+      }
+    : null
+
+  const feedArticles = posts.map((post) => ({
     id: post.id,
-    title: post.title || "Sin Título",
-    slug: post.slug || "",
-    excerpt: post.summary || "Haz clic para leer más.",
-    content: '', // El contenido completo no es necesario en la lista
-    date: new Date(post.publishDate).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' }),
-    category: 'Artículo', // Temporal. Podrías añadir esta propiedad en Notion.
-    readTime: '5 min', // Temporal
-    gradientClass: `gradient-preset-${index % 5}`, // Asigna un gradiente predefinido
-    imageUrl: '/placeholder.jpg', // Temporal. Podrías añadir esto en Notion.
-  }));
+    title: post.title,
+    slug: post.slug,
+    summary: post.summary,
+    publishDate: formatDate(post.publishDate),
+    category: post.category,
+    readTime: post.readTime,
+    tags: post.tags,
+  }))
 
-  // 3. Renderizamos el componente de cliente y le pasamos los artículos reales como un "prop"
-  return <HomePageClient initialArticles={articles} />;
+  return (
+    <div className="min-h-screen bg-background">
+      <HeroSection />
+      {featuredArticle && <FeaturedArticle article={featuredArticle} />}
+      <ArticlesFeed articles={feedArticles} />
+      <AboutSection />
+      <NewsletterCta />
+    </div>
+  )
 }

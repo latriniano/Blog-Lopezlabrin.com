@@ -64,11 +64,11 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "derecho":
-        return "border-[#dc143c] text-[#dc143c]"
+        return "border-[#e84133] text-[#e84133]"
       case "politica":
-        return "border-[#1e90ff] text-[#1e90ff]"
+        return "border-[#f9b000] text-[#f9b000]"
       case "economia":
-        return "border-[#6a1b9a] text-[#6a1b9a]"
+        return "border-[#f9b000] text-[#f9b000]"
       default:
         return "border-white/20 text-[#d3d3d3]"
     }
@@ -104,7 +104,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
               </button>
               <button
                 onClick={handleSave}
-                className="flex items-center space-x-2 px-4 py-2 bg-[#dc143c] text-white rounded-lg hover:bg-[#b91c3c] transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-[#e84133] text-white rounded-lg hover:bg-[#c73228] transition-colors"
               >
                 <Save className="w-4 h-4" />
                 <span>Guardar</span>
@@ -128,7 +128,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                 id="title"
                 value={articleData.title}
                 onChange={(e) => setArticleData({ ...articleData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors text-xl font-semibold"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#f9b000] transition-colors text-xl font-semibold"
                 placeholder="Ingresa el título del artículo..."
               />
             </div>
@@ -143,7 +143,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                 value={articleData.excerpt}
                 onChange={(e) => setArticleData({ ...articleData, excerpt: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors resize-vertical"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#f9b000] transition-colors resize-vertical"
                 placeholder="Breve descripción del artículo que aparecerá en las tarjetas..."
               />
             </div>
@@ -176,7 +176,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                     onChange={(e) =>
                       setArticleData({ ...articleData, status: e.target.value as "draft" | "published" })
                     }
-                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white focus:outline-none focus:border-[#dc143c] transition-colors"
+                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white focus:outline-none focus:border-[#f9b000] transition-colors"
                   >
                     <option value="draft">Borrador</option>
                     <option value="published">Publicado</option>
@@ -193,7 +193,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                     id="publishDate"
                     value={articleData.publishDate}
                     onChange={(e) => setArticleData({ ...articleData, publishDate: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white focus:outline-none focus:border-[#dc143c] transition-colors"
+                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white focus:outline-none focus:border-[#f9b000] transition-colors"
                   />
                 </div>
 
@@ -207,7 +207,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                     id="readTime"
                     value={articleData.readTime}
                     onChange={(e) => setArticleData({ ...articleData, readTime: e.target.value })}
-                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors"
+                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#f9b000] transition-colors"
                     placeholder="ej: 10 min de lectura"
                   />
                 </div>
@@ -227,7 +227,7 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                       value={category}
                       checked={articleData.category === category}
                       onChange={(e) => setArticleData({ ...articleData, category: e.target.value })}
-                      className="w-4 h-4 text-[#dc143c] bg-[#2a2a2a] border-white/20 focus:ring-[#dc143c] focus:ring-2"
+                      className="w-4 h-4 text-[#e84133] bg-[#2a2a2a] border-white/20 focus:ring-[#f9b000] focus:ring-2"
                     />
                     <span className={`capitalize font-medium ${getCategoryColor(category)}`}>
                       {category === "politica" ? "Política" : category === "economia" ? "Economía" : "Derecho"}
@@ -251,12 +251,12 @@ export function ArticleEditor({ initialData, onSave, onPreview }: ArticleEditorP
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
-                    className="flex-1 px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#dc143c] transition-colors"
+                    className="flex-1 px-3 py-2 bg-[#2a2a2a] border border-white/20 rounded-lg text-white placeholder-[#d3d3d3] focus:outline-none focus:border-[#f9b000] transition-colors"
                     placeholder="Nueva etiqueta"
                   />
                   <button
                     onClick={handleAddTag}
-                    className="px-3 py-2 bg-[#dc143c] text-white rounded-lg hover:bg-[#b91c3c] transition-colors"
+                    className="px-3 py-2 bg-[#e84133] text-white rounded-lg hover:bg-[#c73228] transition-colors"
                   >
                     +
                   </button>
