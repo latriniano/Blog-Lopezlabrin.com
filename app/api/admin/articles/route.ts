@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { ADMIN_SESSION_COOKIE_NAME, isAdminSessionTokenValid } from "@/lib/admin-auth"
+import type { BlogPostSummary } from "@/lib/notion"
 import { createAdminArticle, getAllBlogPosts } from "@/lib/notion"
 import { slugify } from "@/lib/utils"
 
@@ -94,6 +96,19 @@ function mapCreateError(error: unknown) {
   }
 
   return { status: 500, error: "No se pudo crear el artículo en Notion." }
+}
+
+function revalidatePublicArticlePaths(article: Pick<BlogPostSummary, "slug" | "category">) {
+  revalidatePath("/")
+  revalidatePath("/categorias")
+
+  if (article.slug) {
+    revalidatePath(`/articulos/${article.slug}`)
+  }
+
+  if (article.category) {
+    revalidatePath(`/categoria/${slugify(article.category)}`)
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -219,6 +234,8 @@ export async function POST(request: NextRequest) {
       seoDescription: normalizeText(body.seoDescription) || undefined,
       content: normalizeText(body.content) || undefined,
     })
+
+    revalidatePublicArticlePaths(created)
 
     return NextResponse.json(
       {

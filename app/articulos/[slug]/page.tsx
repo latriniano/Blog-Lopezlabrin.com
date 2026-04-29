@@ -7,6 +7,8 @@ import { CategoryBadge } from "@/components/category-badge"
 import NotionRenderer from "@/components/NotionRenderer"
 import { getPostContent, getPublishedBlogPosts, getSinglePostBySlug } from "@/lib/notion"
 
+export const revalidate = 60
+
 interface ArticlePageProps {
   params: Promise<{ slug: string }>
 }
@@ -18,6 +20,7 @@ function formatLongDate(date?: string) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   })
 }
 

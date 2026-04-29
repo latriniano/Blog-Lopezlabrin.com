@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { ADMIN_SESSION_COOKIE_NAME, isAdminSessionTokenValid } from "@/lib/admin-auth"
+import type { BlogPostSummary } from "@/lib/notion"
 import { archiveAdminArticle, getAdminArticleById, updateAdminArticle } from "@/lib/notion"
+import { slugify } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -126,6 +129,26 @@ function buildPatchInput(body: PatchArticleBody) {
   }
 }
 
+function revalidatePublicArticlePaths(...articles: Array<Pick<BlogPostSummary, "slug" | "category"> | null | undefined>) {
+  const paths = new Set(["/", "/categorias"])
+
+  for (const article of articles) {
+    if (!article) continue
+
+    if (article.slug) {
+      paths.add(`/articulos/${article.slug}`)
+    }
+
+    if (article.category) {
+      paths.add(`/categoria/${slugify(article.category)}`)
+    }
+  }
+
+  for (const path of paths) {
+    revalidatePath(path)
+  }
+}
+
 export async function GET(request: NextRequest, context: RouteContext) {
   const sessionToken = request.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value
 
@@ -164,10 +187,17 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   }
 
   try {
+    const existing = await getAdminArticleById(articleId)
+    if (!existing) {
+      return NextResponse.json({ error: "Artículo no encontrado." }, { status: 404 })
+    }
+
     const updated = await updateAdminArticle(articleId, buildPatchInput(body))
     if (!updated) {
       return NextResponse.json({ error: "Artículo no encontrado." }, { status: 404 })
     }
+
+    revalidatePublicArticlePaths(existing, updated)
 
     return NextResponse.json({ item: updated })
   } catch (error) {
@@ -195,6 +225,8 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     }
 
     await archiveAdminArticle(articleId)
+    revalidatePublicArticlePaths(existing)
+
     return NextResponse.json({ ok: true })
   } catch (error) {
     const mappedError = mapAdminError(error)

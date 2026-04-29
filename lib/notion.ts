@@ -305,6 +305,11 @@ function isPublishedStatus(status: string) {
   return ["published", "publicado", "live", "activo"].includes(normalized)
 }
 
+function isArchivedStatus(status: string) {
+  const normalized = normalizeKey(status)
+  return ["archived", "archivado", "archive", "inactivo", "inactive"].includes(normalized)
+}
+
 function mapPageToPostSummary(page: NotionPage): BlogPostSummary {
   const properties = page.properties ?? {}
 
@@ -452,6 +457,16 @@ function sortPostsByDateDesc(posts: BlogPostSummary[]) {
   })
 }
 
+function findPostBySlug(posts: BlogPostSummary[], slug: string) {
+  const normalizedSlug = slugify(slug)
+  const exact = posts.find((post) => slugify(post.slug) === normalizedSlug)
+
+  if (exact) return exact
+
+  const compactSlug = normalizedSlug.replace(/-/g, "")
+  return posts.find((post) => slugify(post.slug).replace(/-/g, "") === compactSlug)
+}
+
 export async function getAllBlogPosts({ includeDrafts = false }: { includeDrafts?: boolean } = {}) {
   const pages = await queryDatabasePages({ filterPublished: false })
   const posts = pages.map(mapPageToPostSummary)
@@ -473,9 +488,20 @@ export async function getPublishedBlogPosts() {
 
 export async function getSinglePostBySlug(slug: string, { includeDrafts = false }: { includeDrafts?: boolean } = {}) {
   const databaseId = process.env.NOTION_DATABASE_ID
+  const normalizedSlug = slugify(slug)
 
-  if (!databaseId || !slug) {
+  if (!databaseId || !normalizedSlug) {
     return null
+  }
+
+  const findFallbackPost = async () => {
+    const allPosts = await getAllBlogPosts({ includeDrafts: true })
+    const searchablePosts = includeDrafts ? allPosts : allPosts.filter((post) => post.isPublished)
+    const fallbackPost = findPostBySlug(searchablePosts, normalizedSlug)
+
+    if (!fallbackPost) return null
+
+    return fallbackPost
   }
 
   try {
@@ -484,27 +510,21 @@ export async function getSinglePostBySlug(slug: string, { includeDrafts = false 
       filter: {
         property: "Slug",
         rich_text: {
-          equals: slug,
+          equals: normalizedSlug,
         },
       },
       page_size: 5,
     })
 
     const mapped = response.results.map((page) => mapPageToPostSummary(page as NotionPage))
-    const exact = mapped.find((post) => post.slug === slug)
+    const searchablePosts = includeDrafts ? mapped : mapped.filter((post) => post.isPublished)
+    const exact = findPostBySlug(searchablePosts, normalizedSlug)
 
-    if (!exact) return null
-    if (!includeDrafts && !exact.isPublished) return null
+    if (!exact) return findFallbackPost()
 
     return exact
   } catch {
-    const allPosts = await getAllBlogPosts({ includeDrafts: true })
-    const fallbackPost = allPosts.find((post) => post.slug === slug)
-
-    if (!fallbackPost) return null
-    if (!includeDrafts && !fallbackPost.isPublished) return null
-
-    return fallbackPost
+    return findFallbackPost()
   }
 }
 
@@ -1366,7 +1386,10 @@ async function assertSlugIsUnique(slug: string, excludePageId?: string) {
   const normalizedSlug = slugify(slug)
 
   const duplicated = allPosts.find(
-    (post) => slugify(post.slug) === normalizedSlug && (!excludePageId || post.id !== excludePageId),
+    (post) =>
+      !isArchivedStatus(post.status) &&
+      slugify(post.slug) === normalizedSlug &&
+      (!excludePageId || post.id !== excludePageId),
   )
 
   if (duplicated) {
