@@ -6,11 +6,7 @@ import { Menu, X } from "lucide-react"
 import ThemeToggle from "@/components/theme-toggle"
 
 const navItems = [
-  { label: "Inicio", href: "/" },
   { label: "Artículos", href: "/#articulos" },
-  { label: "Categorías", href: "/categorias" },
-  { label: "Sobre mí", href: "/acerca-de" },
-  { label: "Contacto", href: "/contacto" },
 ]
 
 export default function SiteHeader() {
