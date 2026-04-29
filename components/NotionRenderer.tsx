@@ -18,12 +18,25 @@ type RichTextItem = {
   }
 }
 
-type NotionBlock = {
+type Footnote = {
+  label: string
+  richText: RichTextItem[]
+}
+
+type RenderContext = {
+  footnotes: Map<string, Footnote>
+}
+
+export type NotionBlock = {
   id: string
   type: string
   has_children?: boolean
   children?: NotionBlock[]
   [key: string]: any
+}
+
+export function getHeadingAnchorId(block: Pick<NotionBlock, "id">) {
+  return `section-${String(block.id).replace(/[^a-zA-Z0-9_-]/g, "")}`
 }
 
 function getRichText(block: NotionBlock, type: string): RichTextItem[] {
@@ -34,12 +47,61 @@ function getPlainText(richText: RichTextItem[] = []) {
   return richText.map((item) => item.plain_text ?? "").join("")
 }
 
+function getFootnoteAnchorId(label: string) {
+  const normalized = label
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9_-]/g, "")
+
+  return `footnote-${normalized || "note"}`
+}
+
 function isInternalLink(url: string) {
   return url.startsWith("/")
 }
 
-function renderRichText(richText: RichTextItem[] = []) {
-  return richText.map((item, index) => {
+function renderFootnoteReference(label: string, key: string, context: RenderContext) {
+  const note = context.footnotes.get(label)
+  const preview = note ? getPlainText(note.richText).slice(0, 220) : ""
+
+  return (
+    <a
+      key={key}
+      href={`#${getFootnoteAnchorId(label)}`}
+      className="article-footnote-ref"
+      data-footnote-preview={preview || undefined}
+      aria-label={`Ver nota ${label}`}
+    >
+      <sup>{label}</sup>
+    </a>
+  )
+}
+
+function renderAnnotatedSegment(item: RichTextItem, text: string, key: string, className: string) {
+  const content = <span className={className}>{text}</span>
+  const linkUrl = item.text?.link?.url || item.href
+
+  if (!linkUrl) {
+    return <span key={key}>{content}</span>
+  }
+
+  if (isInternalLink(linkUrl)) {
+    return (
+      <Link key={key} href={linkUrl}>
+        {content}
+      </Link>
+    )
+  }
+
+  return (
+    <a key={key} href={linkUrl} target="_blank" rel="noopener noreferrer">
+      {content}
+    </a>
+  )
+}
+
+function renderRichText(richText: RichTextItem[] = [], context: RenderContext) {
+  return richText.flatMap((item, index) => {
     const annotations = item.annotations || {}
     const className = [
       annotations.bold ? "font-semibold" : "",
@@ -51,32 +113,32 @@ function renderRichText(richText: RichTextItem[] = []) {
       .filter(Boolean)
       .join(" ")
 
-    const content = <span className={className}>{item.plain_text}</span>
-    const linkUrl = item.text?.link?.url || item.href
+    const text = item.plain_text ?? ""
+    const nodes: ReactNode[] = []
+    const pattern = /\[\^([^\]]+)\]/g
+    let cursor = 0
+    let match: RegExpExecArray | null
 
-    if (!linkUrl) {
-      return <span key={index}>{content}</span>
+    while ((match = pattern.exec(text))) {
+      if (match.index > cursor) {
+        nodes.push(renderAnnotatedSegment(item, text.slice(cursor, match.index), `${index}-${cursor}`, className))
+      }
+
+      nodes.push(renderFootnoteReference(match[1], `${index}-footnote-${match.index}`, context))
+      cursor = match.index + match[0].length
     }
 
-    if (isInternalLink(linkUrl)) {
-      return (
-        <Link key={index} href={linkUrl}>
-          {content}
-        </Link>
-      )
+    if (cursor < text.length) {
+      nodes.push(renderAnnotatedSegment(item, text.slice(cursor), `${index}-${cursor}`, className))
     }
 
-    return (
-      <a key={index} href={linkUrl} target="_blank" rel="noopener noreferrer">
-        {content}
-      </a>
-    )
+    return nodes
   })
 }
 
-function renderBlockChildren(block: NotionBlock) {
+function renderBlockChildren(block: NotionBlock, context: RenderContext) {
   if (!block.children?.length) return null
-  return <div className="mt-3 pl-4 border-l border-border/70">{renderBlocks(block.children)}</div>
+  return <div className="mt-3 pl-4 border-l border-border/70">{renderBlocks(block.children, context)}</div>
 }
 
 function renderMedia(block: NotionBlock, type: "image" | "video" | "file" | "pdf") {
@@ -107,7 +169,7 @@ function renderMedia(block: NotionBlock, type: "image" | "video" | "file" | "pdf
   )
 }
 
-function renderTable(block: NotionBlock) {
+function renderTable(block: NotionBlock, context: RenderContext) {
   const rows = block.children?.filter((child) => child.type === "table_row") ?? []
   if (!rows.length) return null
 
@@ -122,7 +184,7 @@ function renderTable(block: NotionBlock) {
               <tr key={row.id} className="border-b border-border/70">
                 {cells.map((cell, index) => (
                   <td key={`${row.id}-${index}`} className="px-3 py-2 align-top text-sm">
-                    {renderRichText(cell)}
+                    {renderRichText(cell, context)}
                   </td>
                 ))}
               </tr>
@@ -134,22 +196,22 @@ function renderTable(block: NotionBlock) {
   )
 }
 
-function renderSingleBlock(block: NotionBlock): ReactNode {
+function renderSingleBlock(block: NotionBlock, context: RenderContext): ReactNode {
   switch (block.type) {
     case "paragraph":
-      return <p>{renderRichText(getRichText(block, "paragraph"))}</p>
+      return <p>{renderRichText(getRichText(block, "paragraph"), context)}</p>
 
     case "heading_1":
-      return <h1>{renderRichText(getRichText(block, "heading_1"))}</h1>
+      return <h1 id={getHeadingAnchorId(block)}>{renderRichText(getRichText(block, "heading_1"), context)}</h1>
 
     case "heading_2":
-      return <h2>{renderRichText(getRichText(block, "heading_2"))}</h2>
+      return <h2 id={getHeadingAnchorId(block)}>{renderRichText(getRichText(block, "heading_2"), context)}</h2>
 
     case "heading_3":
-      return <h3>{renderRichText(getRichText(block, "heading_3"))}</h3>
+      return <h3 id={getHeadingAnchorId(block)}>{renderRichText(getRichText(block, "heading_3"), context)}</h3>
 
     case "quote":
-      return <blockquote>{renderRichText(getRichText(block, "quote"))}</blockquote>
+      return <blockquote>{renderRichText(getRichText(block, "quote"), context)}</blockquote>
 
     case "callout": {
       const icon = block.callout?.icon?.emoji || "•"
@@ -157,9 +219,9 @@ function renderSingleBlock(block: NotionBlock): ReactNode {
         <div className="my-6 border border-border bg-secondary px-4 py-3">
           <p className="flex items-start gap-3">
             <span>{icon}</span>
-            <span>{renderRichText(getRichText(block, "callout"))}</span>
+            <span>{renderRichText(getRichText(block, "callout"), context)}</span>
           </p>
-          {renderBlockChildren(block)}
+          {renderBlockChildren(block, context)}
         </div>
       )
     }
@@ -182,11 +244,11 @@ function renderSingleBlock(block: NotionBlock): ReactNode {
       return <hr className="my-8 border-border" />
 
     case "toggle": {
-      const label = renderRichText(getRichText(block, "toggle"))
+      const label = renderRichText(getRichText(block, "toggle"), context)
       return (
         <details className="my-4 border border-border px-4 py-3">
           <summary className="cursor-pointer font-medium">{label}</summary>
-          {renderBlockChildren(block)}
+          {renderBlockChildren(block, context)}
         </details>
       )
     }
@@ -238,7 +300,7 @@ function renderSingleBlock(block: NotionBlock): ReactNode {
       return renderMedia(block, "pdf")
 
     case "table":
-      return renderTable(block)
+      return renderTable(block, context)
 
     case "child_page":
       return <h3>{block.child_page?.title || "Página"}</h3>
@@ -248,7 +310,7 @@ function renderSingleBlock(block: NotionBlock): ReactNode {
   }
 }
 
-function renderListItem(block: NotionBlock) {
+function renderListItem(block: NotionBlock, context: RenderContext) {
   const type = block.type
 
   if (type === "to_do") {
@@ -259,8 +321,8 @@ function renderListItem(block: NotionBlock) {
         <span aria-hidden="true" className="mt-[2px]">
           {checked ? "☑" : "☐"}
         </span>
-        <span>{renderRichText(getRichText(block, "to_do"))}</span>
-        {renderBlockChildren(block)}
+        <span>{renderRichText(getRichText(block, "to_do"), context)}</span>
+        {renderBlockChildren(block, context)}
       </li>
     )
   }
@@ -269,13 +331,13 @@ function renderListItem(block: NotionBlock) {
 
   return (
     <li key={block.id}>
-      {renderRichText(richText)}
-      {renderBlockChildren(block)}
+      {renderRichText(richText, context)}
+      {renderBlockChildren(block, context)}
     </li>
   )
 }
 
-function renderBlocks(blocks: NotionBlock[]): ReactNode[] {
+function renderBlocks(blocks: NotionBlock[], context: RenderContext): ReactNode[] {
   const rendered: ReactNode[] = []
 
   for (let index = 0; index < blocks.length; index += 1) {
@@ -296,19 +358,19 @@ function renderBlocks(blocks: NotionBlock[]): ReactNode[] {
       if (listType === "bulleted_list_item") {
         rendered.push(
           <ul key={`ul-${block.id}`}>
-            {items.map(renderListItem)}
+            {items.map((item) => renderListItem(item, context))}
           </ul>,
         )
       } else if (listType === "numbered_list_item") {
         rendered.push(
           <ol key={`ol-${block.id}`}>
-            {items.map(renderListItem)}
+            {items.map((item) => renderListItem(item, context))}
           </ol>,
         )
       } else {
         rendered.push(
           <ul key={`todo-${block.id}`} className="list-none pl-0">
-            {items.map(renderListItem)}
+            {items.map((item) => renderListItem(item, context))}
           </ul>,
         )
       }
@@ -317,7 +379,7 @@ function renderBlocks(blocks: NotionBlock[]): ReactNode[] {
       continue
     }
 
-    const node = renderSingleBlock(block)
+    const node = renderSingleBlock(block, context)
 
     if (node) {
       rendered.push(<div key={block.id}>{node}</div>)
@@ -327,6 +389,80 @@ function renderBlocks(blocks: NotionBlock[]): ReactNode[] {
   return rendered
 }
 
+function stripRichTextPrefix(richText: RichTextItem[], prefixLength: number) {
+  let remaining = prefixLength
+
+  return richText.flatMap((item) => {
+    const text = item.plain_text ?? ""
+
+    if (remaining >= text.length) {
+      remaining -= text.length
+      return []
+    }
+
+    if (remaining > 0) {
+      const nextItem = { ...item, plain_text: text.slice(remaining) }
+      remaining = 0
+      return [nextItem]
+    }
+
+    return [item]
+  })
+}
+
+function extractFootnotes(blocks: NotionBlock[]) {
+  const bodyBlocks: NotionBlock[] = []
+  const footnotes: Footnote[] = []
+
+  for (const block of blocks) {
+    if (block.type === "paragraph") {
+      const richText = getRichText(block, "paragraph")
+      const text = getPlainText(richText)
+      const match = text.match(/^\[\^([^\]]+)\]:\s*/)
+
+      if (match) {
+        footnotes.push({
+          label: match[1],
+          richText: stripRichTextPrefix(richText, match[0].length),
+        })
+        continue
+      }
+    }
+
+    bodyBlocks.push(block)
+  }
+
+  return { bodyBlocks, footnotes }
+}
+
+function renderFootnotes(footnotes: Footnote[], context: RenderContext) {
+  if (!footnotes.length) return null
+
+  return (
+    <section className="article-footnotes" aria-label="Notas">
+      <h2 id="notas">Notas</h2>
+      <ol>
+        {footnotes.map((footnote) => (
+          <li key={footnote.label} id={getFootnoteAnchorId(footnote.label)}>
+            <span className="article-footnote-number">{footnote.label}</span>
+            <p>{renderRichText(footnote.richText, context)}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
 export default function NotionRenderer({ blocks }: { blocks: NotionBlock[] }) {
-  return <>{renderBlocks(blocks)}</>
+  const { bodyBlocks, footnotes } = extractFootnotes(blocks)
+  const context = {
+    footnotes: new Map(footnotes.map((footnote) => [footnote.label, footnote])),
+  }
+
+  return (
+    <>
+      {renderBlocks(bodyBlocks, context)}
+      {renderFootnotes(footnotes, context)}
+    </>
+  )
 }

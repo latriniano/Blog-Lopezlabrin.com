@@ -398,6 +398,20 @@ export function AdminArticleForm({ mode, articleId, initialData }: AdminArticleF
               {" "}
               y bloques de código con <code>{`\`\`\``}</code>.
             </p>
+            <div className="mt-3 border border-border bg-muted/30 p-4 text-xs text-muted-foreground">
+              <p className="mb-2 font-sans text-[10px] uppercase text-foreground">Citas clickeables</p>
+              <p className="leading-relaxed">
+                En el texto usá <code>[^1]</code>. Al final del contenido, separado por una línea en blanco, agregá la nota:
+              </p>
+              <pre className="mt-3 overflow-x-auto border border-border bg-background p-3 font-mono text-[12px] leading-relaxed text-foreground">
+{`Esto afirma algo importante[^1].
+
+[^1]: Autor, obra o link de la fuente.`}
+              </pre>
+              <p className="mt-2 leading-relaxed">
+                El reader transforma el número en enlace, muestra una preview al pasar el mouse y manda a la sección Notas.
+              </p>
+            </div>
           </div>
         </section>
 

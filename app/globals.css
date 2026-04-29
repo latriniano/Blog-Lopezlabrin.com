@@ -221,3 +221,221 @@
   border: 0;
   padding: 0;
 }
+
+.article-reader .notion-content {
+  color: #202020;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.16rem;
+  line-height: 1.78;
+}
+
+.article-reader .notion-content h1,
+.article-reader .notion-content h2,
+.article-reader .notion-content h3,
+.article-reader .notion-content h4,
+.article-reader .notion-content h5,
+.article-reader .notion-content h6 {
+  color: #1d1d1f;
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+  letter-spacing: 0;
+  line-height: 1.12;
+  scroll-margin-top: 140px;
+}
+
+.article-reader .notion-content h1 {
+  font-size: 2.55rem;
+  margin-top: 3.75rem;
+}
+
+.article-reader .notion-content h2 {
+  border-bottom: 0;
+  font-size: 2.15rem;
+  margin-top: 3.6rem;
+  padding-bottom: 0;
+}
+
+.article-reader .notion-content h3 {
+  color: #3d3b36;
+  font-size: 1.5rem;
+  margin-top: 2.7rem;
+}
+
+.article-reader .notion-content p {
+  color: #202020;
+  font-size: inherit;
+  margin-bottom: 1.45rem;
+}
+
+.article-reader .notion-content blockquote {
+  background: transparent;
+  border-left: 3px solid var(--color-red);
+  color: #3d3b36;
+  font-size: 1.12em;
+  margin: 2.1rem 0;
+  padding: 0.15rem 0 0.15rem 1.35rem;
+}
+
+.article-reader .notion-content ul,
+.article-reader .notion-content ol {
+  margin: 1.35rem 0 1.7rem;
+  padding-left: 1.35rem;
+}
+
+.article-reader .notion-content li {
+  margin-bottom: 0.7rem;
+  padding-left: 0.15rem;
+}
+
+.article-reader .notion-content li::marker {
+  color: var(--color-red);
+}
+
+.article-reader .notion-content a {
+  color: #202020;
+  text-decoration-color: rgba(32, 32, 32, 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.article-reader .notion-content a:hover {
+  color: var(--color-red);
+  text-decoration-color: var(--color-red);
+}
+
+.article-reader .notion-content code {
+  background: #ebe8df;
+  border: 1px solid #dedbd2;
+  color: #202020;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.article-reader .notion-content pre {
+  background: #202020;
+  color: #f7f6f1;
+}
+
+.article-reader .notion-content img,
+.article-reader .notion-content figure {
+  border-color: #dedbd2;
+}
+
+.article-reader .article-footnote-ref {
+  align-items: center;
+  background: #d8d5cc;
+  border-radius: 999px;
+  color: #56534c;
+  display: inline-flex;
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 0.72rem;
+  height: 1.2rem;
+  justify-content: center;
+  line-height: 1;
+  margin: 0 0.12rem;
+  min-width: 1.2rem;
+  padding: 0 0.35rem;
+  position: relative;
+  text-decoration: none;
+  vertical-align: super;
+}
+
+.article-reader .article-footnote-ref sup {
+  font-size: inherit;
+  line-height: 1;
+  top: 0;
+}
+
+.article-reader .article-footnote-ref:focus-visible {
+  outline: 2px solid var(--color-red);
+  outline-offset: 3px;
+}
+
+.article-reader .article-footnote-ref[data-footnote-preview]:hover::after,
+.article-reader .article-footnote-ref[data-footnote-preview]:focus-visible::after {
+  background: #fffef9;
+  border: 1px solid #dedbd2;
+  bottom: calc(100% + 0.75rem);
+  box-shadow: 0 18px 50px rgba(32, 32, 32, 0.18);
+  color: #202020;
+  content: attr(data-footnote-preview);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 400;
+  left: 50%;
+  line-height: 1.48;
+  padding: 1rem 1.1rem;
+  position: absolute;
+  text-align: left;
+  transform: translateX(-50%);
+  white-space: normal;
+  width: min(22rem, calc(100vw - 2rem));
+  z-index: 30;
+}
+
+.article-reader .article-footnotes {
+  border-top: 1px solid #dedbd2;
+  margin-top: 4.5rem;
+  padding-top: 2rem;
+}
+
+.article-reader .article-footnotes h2 {
+  border-bottom: 0;
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+.article-reader .article-footnotes ol {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article-reader .article-footnotes li {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 2.35rem minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  scroll-margin-top: 140px;
+}
+
+.article-reader .article-footnote-number {
+  align-items: center;
+  background: #d8d5cc;
+  border-radius: 999px;
+  color: #56534c;
+  display: inline-flex;
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 0.8rem;
+  height: 1.55rem;
+  justify-content: center;
+  min-width: 1.55rem;
+  padding: 0 0.4rem;
+}
+
+.article-reader .article-footnotes p {
+  color: #3d3b36;
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .article-reader .notion-content {
+    font-size: 1.24rem;
+  }
+
+  .article-reader .notion-content h1 {
+    font-size: 3.1rem;
+  }
+
+  .article-reader .notion-content h2 {
+    font-size: 2.45rem;
+  }
+
+  .article-reader .notion-content h3 {
+    font-size: 1.72rem;
+  }
+}
