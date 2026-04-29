@@ -10,14 +10,19 @@ type Theme = "light" | "dark"
 
 type ThemeToggleProps = {
   className?: string
+  tone?: "default" | "on-dark"
 }
 
 const getCurrentTheme = (): Theme =>
   document.documentElement.classList.contains("dark") ? "dark" : "light"
 
-export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
+export default function ThemeToggle({ className = "", tone = "default" }: ThemeToggleProps) {
   const [theme, setTheme] = useState<Theme>("light")
   const [mounted, setMounted] = useState(false)
+  const toneClassName =
+    tone === "on-dark"
+      ? "border-white/30 bg-white/20 text-white shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:border-white/50 hover:bg-white/30"
+      : "border-border bg-background/90 text-foreground hover:bg-secondary"
 
   useEffect(() => {
     const root = document.documentElement
@@ -55,7 +60,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       <button
         type="button"
         aria-label="Cargando selector de tema"
-        className={`h-9 w-9 border border-border bg-background/80 ${className}`}
+        className={`h-9 w-9 border ${toneClassName} ${className}`}
         disabled
       />
     )
@@ -69,7 +74,7 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       onClick={handleToggle}
       aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       title={isDark ? "Modo claro" : "Modo oscuro"}
-      className={`group relative h-9 w-9 border border-border bg-background/90 text-foreground transition-colors hover:bg-secondary ${className}`}
+      className={`group relative h-9 w-9 border transition-colors ${toneClassName} ${className}`}
     >
       <Sun
         size={15}
