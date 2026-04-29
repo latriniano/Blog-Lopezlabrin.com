@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "fs/promises"
 import path from "path"
 import { randomUUID } from "crypto"
 import { NextRequest, NextResponse } from "next/server"
+import { put } from "@vercel/blob"
 import { ADMIN_SESSION_COOKIE_NAME, isAdminSessionTokenValid } from "@/lib/admin-auth"
 import { slugify } from "@/lib/utils"
 
@@ -35,6 +36,41 @@ function getExtensionFromName(fileName: string) {
   return ""
 }
 
+function hasBlobStorage() {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+}
+
+function isVercelRuntime() {
+  return Boolean(process.env.VERCEL)
+}
+
+async function saveToBlob(fileName: string, bytes: Buffer, contentType: string) {
+  const blob = await put(`covers/${fileName}`, bytes, {
+    access: "public",
+    contentType: contentType || undefined,
+  })
+
+  return {
+    path: blob.pathname,
+    url: blob.url,
+  }
+}
+
+async function saveToLocalUploads(fileName: string, bytes: Buffer, requestUrl: string) {
+  const uploadDir = path.join(process.cwd(), "public", "uploads", "covers")
+  const filePath = path.join(uploadDir, fileName)
+
+  await mkdir(uploadDir, { recursive: true })
+  await writeFile(filePath, bytes)
+
+  const relativePath = `/uploads/covers/${fileName}`
+
+  return {
+    path: relativePath,
+    url: new URL(relativePath, requestUrl).toString(),
+  }
+}
+
 export async function POST(request: NextRequest) {
   const sessionToken = request.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value
 
@@ -61,6 +97,7 @@ export async function POST(request: NextRequest) {
 
   const extensionFromMime = ALLOWED_MIME_TYPES.get(file.type)
   const extension = extensionFromMime || getExtensionFromName(file.name)
+  const contentType = extensionFromMime ? file.type : ""
 
   if (!extension) {
     return NextResponse.json(
@@ -73,24 +110,35 @@ export async function POST(request: NextRequest) {
   const uniqueSuffix = `${Date.now()}-${randomUUID().slice(0, 8)}`
   const fileName = `${uniqueSuffix}-${safeName}.${extension}`
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "covers")
-  const filePath = path.join(uploadDir, fileName)
+  const bytes = Buffer.from(await file.arrayBuffer())
 
   try {
-    await mkdir(uploadDir, { recursive: true })
+    if (hasBlobStorage()) {
+      const savedFile = await saveToBlob(fileName, bytes, contentType)
 
-    const bytes = await file.arrayBuffer()
-    await writeFile(filePath, Buffer.from(bytes))
-  } catch {
+      return NextResponse.json({
+        ok: true,
+        path: savedFile.path,
+        url: savedFile.url,
+      })
+    }
+
+    if (isVercelRuntime()) {
+      return NextResponse.json(
+        { error: "Falta configurar Vercel Blob para subir imágenes." },
+        { status: 500 },
+      )
+    }
+
+    const savedFile = await saveToLocalUploads(fileName, bytes, request.url)
+
+    return NextResponse.json({
+      ok: true,
+      path: savedFile.path,
+      url: savedFile.url,
+    })
+  } catch (error) {
+    console.error("Cover upload failed", error)
     return NextResponse.json({ error: "No se pudo guardar la imagen." }, { status: 500 })
   }
-
-  const relativePath = `/uploads/covers/${fileName}`
-  const absoluteUrl = new URL(relativePath, request.url).toString()
-
-  return NextResponse.json({
-    ok: true,
-    path: relativePath,
-    url: absoluteUrl,
-  })
 }
